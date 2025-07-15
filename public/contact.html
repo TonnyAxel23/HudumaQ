@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact Us | HudumaQ</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- 🔵 Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">HQ</span>
+        <span>HudumaQ</span>
+      </a>
+      <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="book.html"><i class="fas fa-calendar-check"></i> Book Appointment</a></li>
+        <li><a href="queue.html"><i class="fas fa-users"></i> View Queue</a></li>
+        <li><a href="login.html" class="btn btn-outline"><i class="fas fa-lock"></i> Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 🟢 Contact Hero -->
+  <header class="page-hero">
+    <div class="container">
+      <h1>We're Here to Help</h1>
+      <p>Have questions or need assistance? Reach out to our support team.</p>
+    </div>
+  </header>
+
+  <!-- 🟡 Contact Section -->
+  <section class="contact-section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Get in Touch</h2>
+          <p>Our team is ready to assist you with any questions about HudumaQ services.</p>
+          
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-phone-alt"></i>
+            </div>
+            <div>
+              <h3>Call Us</h3>
+              <p>+254 700 123456</p>
+              <p class="contact-hours">Mon-Fri, 8:00 AM - 5:00 PM</p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <div>
+              <h3>Email Us</h3>
+              <p>support@hudumaq.go.ke</p>
+              <p class="contact-hours">Typically responds within 24 hours</p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <div>
+              <h3>Visit Us</h3>
+              <p>HudumaQ Headquarters</p>
+              <p>Nairobi, Kenya</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form">
+          <h2>Send Us a Message</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name" name="name" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <select id="subject" name="subject">
+                <option value="general">General Inquiry</option>
+                <option value="technical">Technical Support</option>
+                <option value="feedback">Feedback/Suggestions</option>
+                <option value="partnership">Partnership Opportunities</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Your Message</label>
+              <textarea id="message" name="message" rows="5" required></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔵 FAQ Preview Section -->
+  <section class="faq-preview">
+    <div class="container">
+      <div class="section-header">
+        <h2>Common Questions</h2>
+        <p>Check our FAQs for quick answers to popular questions</p>
+      </div>
+      
+      <div class="faq-grid">
+        <div class="faq-card">
+          <h3>How do I book an appointment?</h3>
+          <p>Simply go to the Book Appointment page, select your service, choose a date and time, and confirm your booking.</p>
+          <a href="faq.html#booking" class="faq-link">Read more <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="faq-card">
+          <h3>Can I reschedule my appointment?</h3>
+          <p>Yes, you can reschedule up to 24 hours before your appointment time through your account dashboard.</p>
+          <a href="faq.html#rescheduling" class="faq-link">Read more <i class="fas fa-arrow-right"></i></a>
+        </div>
+        
+        <div class="faq-card">
+          <h3>Is there a mobile app available?</h3>
+          <p>Yes! HudumaQ is available on both Android and iOS devices. Download links are on our homepage.</p>
+          <a href="faq.html#mobile" class="faq-link">Read more <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+      
+      <div class="text-center">
+        <a href="faq.html" class="btn btn-secondary">
+          <i class="fas fa-question-circle"></i> View All FAQs
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⚫ Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo">
+            <span class="logo-icon">HQ</span>
+            <span>HudumaQ</span>
+          </div>
+          <p>Building a smarter, more efficient Kenya through innovative technology solutions.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="book.html">Book Appointment</a></li>
+            <li><a href="queue.html">Check Queue</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">ID Services</a></li>
+            <li><a href="#">Passport</a></li>
+            <li><a href="#">Driving License</a></li>
+            <li><a href="#">Business Registration</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul class="contact-info">
+            <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+            <li><i class="fas fa-phone"></i> +254 700 123456</li>
+            <li><i class="fas fa-envelope"></i> support@hudumaq.go.ke</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 HudumaQ. All rights reserved. Built with <span class="heart">♥</span> for Kenyans.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile navigation toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      navToggle.classList.toggle('active');
+    });
+
+    // Form submission
+    const contactForm = document.getElementById('contactForm');
+    contactForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('Thank you for your message! We will get back to you soon.');
+      contactForm.reset();
+    });
+  </script>
+
+  <style>
+    /* Contact Page Specific Styles */
+    .page-hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+      color: white;
+      padding: 8rem 0 4rem;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .page-hero p {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-section {
+      padding: 5rem 0;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+    }
+
+    .contact-info h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
+
+    .contact-info p {
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    .contact-method {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-icon {
+      width: 3.5rem;
+      height: 3.5rem;
+      background-color: rgba(37, 99, 235, 0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .contact-method h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-hours {
+      color: var(--gray);
+      font-size: 0.9rem;
+    }
+
+    .contact-form {
+      background-color: white;
+      padding: 2.5rem;
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .contact-form h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark);
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--rounded);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .faq-preview {
+      padding: 5rem 0;
+      background-color: #f8fafc;
+    }
+
+    .faq-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .faq-card {
+      background-color: white;
+      padding: 2rem;
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+    }
+
+    .faq-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .faq-card h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      color: var(--dark);
+    }
+
+    .faq-card p {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .faq-link:hover {
+      gap: 0.75rem;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .page-hero {
+        padding: 7rem 0 3rem;
+      }
+      
+      .page-hero h1 {
+        font-size: 2.25rem;
+      }
+    }
+  </style>
+</body>
+</html>

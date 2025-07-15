@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Appointment Confirmation - HudumaQ</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .confirmation-container {
+      max-width: 600px;
+      margin: 4rem auto;
+      background: #ffffff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .confirmation-container h2 {
+      color: #0d47a1;
+      margin-bottom: 1rem;
+    }
+
+    .queue-number {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #0d47a1;
+      margin: 1rem 0;
+    }
+
+    .info-item {
+      margin: 0.5rem 0;
+      font-size: 1rem;
+      color: #333;
+    }
+
+    .btn-group {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+    }
+
+    .btn-print, .btn-home {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-print {
+      background: #388e3c;
+      color: #fff;
+    }
+
+    .btn-home {
+      background: #0d47a1;
+      color: #fff;
+    }
+
+    .btn-print:hover {
+      background: #2e7d32;
+    }
+
+    .btn-home:hover {
+      background: #1565c0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confirmation-container">
+    <h2>✅ Appointment Booked Successfully!</h2>
+    
+    <div class="queue-number" id="queueNumber">#000</div>
+    
+    <div class="info-item"><strong>Name:</strong> <span id="fullname">---</span></div>
+    <div class="info-item"><strong>Phone:</strong> <span id="phone">---</span></div>
+    <div class="info-item"><strong>Service:</strong> <span id="service">---</span></div>
+    <div class="info-item"><strong>Date:</strong> <span id="date">---</span></div>
+    <div class="info-item"><strong>Time:</strong> <span id="time">---</span></div>
+
+    <div class="btn-group">
+      <button class="btn-print" onclick="window.print()">🖨️ Print</button>
+      <button class="btn-home" onclick="window.location.href='index.html'">🏠 Home</button>
+    </div>
+  </div>
+
+  <script>
+    // Fetch confirmation data from sessionStorage
+    const appointment = JSON.parse(sessionStorage.getItem('appointmentDetails'));
+
+    if (!appointment) {
+      alert('No appointment details found.');
+      window.location.href = 'book.html';
+    } else {
+      document.getElementById('queueNumber').textContent = '#' + appointment.queue_number;
+      document.getElementById('fullname').textContent = appointment.fullname;
+      document.getElementById('phone').textContent = appointment.phone;
+      document.getElementById('service').textContent = appointment.service_type;
+      document.getElementById('date').textContent = appointment.appointment_date;
+      document.getElementById('time').textContent = appointment.appointment_time;
+    }
+  </script>
+
+</body>
+</html>
