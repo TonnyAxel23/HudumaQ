@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - HudumaQ</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<style>
+    :root {
+  --primary-color: #4361ee;
+  --primary-light: #e6e9ff;
+  --secondary-color: #3f37c9;
+  --success-color: #4cc9f0;
+  --warning-color: #f8961e;
+  --danger-color: #f94144;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fb;
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-nav li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.sidebar-nav li a i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav li a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.sidebar-nav li.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  color: var(--danger-color);
+}
+
+.logout-btn i {
+  margin-right: 10px;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-color);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.notification-bell {
+  position: relative;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.notification-bell i {
+  font-size: 1.2rem;
+  color: var(--gray-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-dropdown img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-dropdown span {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+  margin-top: 10px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: var(--dark-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.dropdown-menu a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--light-gray);
+  margin: 0.5rem 0;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.page-header p {
+  color: var(--gray-color);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  display: flex;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-danger {
+  background-color: var(--danger-color);
+}
+
+.stat-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.stat-info p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.stat-change {
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.stat-change i {
+  margin-right: 4px;
+  font-size: 0.7rem;
+}
+
+.positive {
+  color: #2ecc71;
+}
+
+.negative {
+  color: var(--danger-color);
+}
+
+.neutral {
+  color: var(--gray-color);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.action-btn i {
+  margin-right: 8px;
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Data Card */
+.data-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card-header h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
+
+.card-header h2 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: var(--gray-color);
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label i {
+  margin-right: 5px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  min-width: 150px;
+}
+
+.filter-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  align-self: flex-end;
+}
+
+.filter-btn:hover {
+  background: var(--secondary-color);
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  padding: 0 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--gray-color);
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table th i {
+  margin-left: 5px;
+  color: var(--light-gray);
+  cursor: pointer;
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.waiting {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.in-progress {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.action-icon {
+  background: none;
+  border: none;
+  color: var(--gray-color);
+  cursor: pointer;
+  margin-right: 10px;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.action-icon:hover {
+  color: var(--primary-color);
+}
+
+/* Card Footer */
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-info {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.table-info span {
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--light-gray);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.pagination-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Widgets Grid */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.widget {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.widget-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widget-header h3 {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.widget-header h3 i {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.widget-filter {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+}
+
+.widget-content {
+  padding: 1.5rem;
+}
+
+.pie-chart-placeholder,
+.line-chart-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-color);
+  border-radius: var(--border-radius);
+}
+
+.alert-item {
+  display: flex;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.critical {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alert-details p {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-time {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+  padding: 1rem 1.5rem;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--gray-color);
+}
+
+.footer-links a {
+  margin-left: 1rem;
+  color: var(--gray-color);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  
+  .sidebar-header .logo span,
+  .sidebar-nav li a span,
+  .logout-btn span {
+    display: none;
+  }
+  
+  .sidebar-nav li a {
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .sidebar-nav li a i {
+    margin-right: 0;
+    font-size: 1.3rem;
+  }
+  
+  .sidebar-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+  }
+  
+  .filter-btn {
+    width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination {
+    margin-top: 1rem;
+  }
+  
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .user-profile {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+.settings-tabs {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.tabs-header {
+  display: flex;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.tab-btn {
+  padding: 1rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--gray-color);
+  position: relative;
+  transition: var(--transition);
+}
+
+.tab-btn.active {
+  color: var(--primary-color);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--primary-color);
+}
+
+.tab-pane {
+  display: none;
+  padding: 1.5rem;
+}
+
+.tab-pane.active {
+  display: block;
+}
+
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.settings-section h3 {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+}
+
+.settings-section h3 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.settings-form {
+  max-width: 600px;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.file-upload img {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.upload-btn {
+  padding: 0.6rem 1rem;
+  background: var(--light-gray);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.upload-btn:hover {
+  background: #ddd;
+}
+
+.business-hours {
+  max-width: 500px;
+}
+
+.day-hours {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.day-hours:last-child {
+  border-bottom: none;
+}
+
+.day-hours span {
+  min-width: 100px;
+}
+
+.time-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.time-range input[type="time"] {
+  padding: 0.5rem;
+}
+
+.closed-label {
+  color: var(--gray-color);
+  margin: 0 1rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.notification-settings {
+  max-width: 800px;
+}
+
+.notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.notification-item:last-child {
+  border-bottom: none;
+}
+
+.notification-info h4 {
+  margin-bottom: 0.3rem;
+}
+
+.notification-info p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+  margin-top: 0.5rem;
+}
+
+.theme-options {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.theme-preview {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.theme-sample {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  border: 1px solid var(--light-gray);
+  cursor: pointer;
+}
+
+.theme-preview input[type="color"] {
+  width: 60px;
+  height: 30px;
+  border: none;
+  cursor: pointer;
+}
+
+.layout-options {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.layout-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.layout-preview {
+  width: 100px;
+  height: 80px;
+  border: 1px solid var(--light-gray);
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.layout-preview.default {
+  background: linear-gradient(to bottom, #4361ee 20%, #f5f7fb 20%);
+}
+
+.layout-preview.compact {
+  background: linear-gradient(to bottom, #4361ee 30%, #f5f7fb 30%);
+}
+
+.layout-preview.spacious {
+  background: linear-gradient(to bottom, #4361ee 15%, #f5f7fb 15%);
+}
+
+.settings-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.save-btn {
+  padding: 0.8rem 1.5rem;
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.save-btn:hover {
+  background: var(--secondary-color);
+}
+
+.cancel-btn {
+  padding: 0.8rem 1.5rem;
+  background: white;
+  color: var(--gray-color);
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cancel-btn:hover {
+  background: var(--light-gray);
+}
+</style>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo">
+          <i class="fas fa-handshake"></i> HudumaQ
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="admin.html">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="appointments.html">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Appointments</span>
+            </a>
+          </li>
+          <li>
+            <a href="service_centers.html">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Service Centers</span>
+            </a>
+          </li>
+          <li class="active">
+            <a href="settings.html">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html">
+              <i class="fas fa-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="users.html">
+              <i class="fas fa-users"></i>
+              <span>Users</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="login.html" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search settings...">
+        </div>
+        
+        <div class="user-profile">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count" id="notificationCount">0</span>
+          </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <img id="profileImage" src="" alt="Admin Profile">
+            <span id="username">Loading...</span>
+            <i class="fas fa-chevron-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="#">
+                <i class="fas fa-user"></i> My Profile
+              </a>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i> Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="login.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Settings Content -->
+      <section class="dashboard-content">
+        <div class="page-header">
+          <h1><i class="fas fa-cog"></i> System Settings</h1>
+          <p>Configure system preferences and application settings</p>
+        </div>
+
+        <!-- Settings Tabs -->
+        <div class="settings-tabs">
+          <div class="tabs-header">
+            <button class="tab-btn active" data-tab="general">General</button>
+            <button class="tab-btn" data-tab="notifications">Notifications</button>
+            <button class="tab-btn" data-tab="security">Security</button>
+            <button class="tab-btn" data-tab="appearance">Appearance</button>
+          </div>
+          
+          <div class="tabs-content">
+            <!-- General Settings Tab -->
+            <div class="tab-pane active" id="general">
+              <div class="settings-section">
+                <h3><i class="fas fa-building"></i> Organization Settings</h3>
+                <div class="settings-form">
+                  <div class="form-group">
+                    <label for="orgName">Organization Name</label>
+                    <input type="text" id="orgName">
+                  </div>
+                  <div class="form-group">
+                    <label for="orgLogo">Organization Logo</label>
+                    <div class="file-upload">
+                      <img src="" alt="Organization Logo" id="logoPreview">
+                      <input type="file" id="orgLogo" accept="image/*">
+                      <button class="upload-btn">Change Logo</button>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="timezone">Timezone</label>
+                    <select id="timezone"></select>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="settings-section">
+                <h3><i class="fas fa-clock"></i> Business Hours</h3>
+                <div class="business-hours" id="businessHours">
+                  <!-- Will be populated by JavaScript -->
+                </div>
+              </div>
+            </div>
+            
+            <!-- Notifications Settings Tab -->
+            <div class="tab-pane" id="notifications">
+              <div class="settings-section">
+                <h3><i class="fas fa-bell"></i> Notification Preferences</h3>
+                <div class="notification-settings" id="notificationSettings">
+                  <!-- Will be populated by JavaScript -->
+                </div>
+              </div>
+              
+              <div class="settings-section">
+                <h3><i class="fas fa-envelope"></i> Email Notifications</h3>
+                <div class="settings-form">
+                  <div class="form-group">
+                    <label for="adminEmail">Admin Email</label>
+                    <input type="email" id="adminEmail">
+                  </div>
+                  <div class="form-group">
+                    <label for="notificationEmail">Notification Email</label>
+                    <input type="email" id="notificationEmail">
+                  </div>
+                  <div class="form-group">
+                    <label for="emailTemplate">Default Email Template</label>
+                    <select id="emailTemplate"></select>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Security Settings Tab -->
+            <div class="tab-pane" id="security">
+              <div class="settings-section">
+                <h3><i class="fas fa-shield-alt"></i> Authentication</h3>
+                <div class="settings-form">
+                  <div class="form-group">
+                    <label for="passwordPolicy">Password Policy</label>
+                    <select id="passwordPolicy"></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="sessionTimeout">Session Timeout</label>
+                    <select id="sessionTimeout"></select>
+                  </div>
+                  <div class="form-group">
+                    <label for="twoFactorAuth">Two-Factor Authentication</label>
+                    <label class="switch">
+                      <input type="checkbox" id="twoFactorAuth">
+                      <span class="slider round"></span>
+                    </label>
+                    <p class="form-hint">Require additional verification for admin access</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="settings-section">
+                <h3><i class="fas fa-lock"></i> Change Password</h3>
+                <div class="settings-form">
+                  <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword">
+                  </div>
+                  <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword">
+                  </div>
+                  <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword">
+                  </div>
+                  <button class="save-btn" id="changePasswordBtn">Change Password</button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Appearance Settings Tab -->
+            <div class="tab-pane" id="appearance">
+              <div class="settings-section">
+                <h3><i class="fas fa-palette"></i> Theme Customization</h3>
+                <div class="theme-options">
+                  <div class="theme-preview primary">
+                    <div class="theme-sample" id="primaryColorSample"></div>
+                    <span>Primary Color</span>
+                    <input type="color" id="primaryColor">
+                  </div>
+                  <div class="theme-preview secondary">
+                    <div class="theme-sample" id="secondaryColorSample"></div>
+                    <span>Secondary Color</span>
+                    <input type="color" id="secondaryColor">
+                  </div>
+                  <div class="theme-preview background">
+                    <div class="theme-sample" id="backgroundColorSample"></div>
+                    <span>Background</span>
+                    <input type="color" id="backgroundColor">
+                  </div>
+                </div>
+              </div>
+              
+              <div class="settings-section">
+                <h3><i class="fas fa-desktop"></i> Dashboard Layout</h3>
+                <div class="layout-options">
+                  <div class="layout-option">
+                    <div class="layout-preview default"></div>
+                    <span>Default</span>
+                    <input type="radio" name="layout" value="default" id="layoutDefault">
+                  </div>
+                  <div class="layout-option">
+                    <div class="layout-preview compact"></div>
+                    <span>Compact</span>
+                    <input type="radio" name="layout" value="compact" id="layoutCompact">
+                  </div>
+                  <div class="layout-option">
+                    <div class="layout-preview spacious"></div>
+                    <span>Spacious</span>
+                    <input type="radio" name="layout" value="spacious" id="layoutSpacious">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="settings-actions">
+          <button class="cancel-btn" id="cancelBtn">Cancel</button>
+          <button class="save-btn" id="saveSettingsBtn">Save Changes</button>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <p>&copy; 2025 HudumaQ. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Help Center</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Fetch user data
+      fetchUserData();
+      
+      // Fetch system settings
+      fetchSystemSettings();
+      
+      // Initialize tab functionality
+      initTabs();
+      
+      // Initialize profile dropdown
+      initProfileDropdown();
+      
+      // Initialize event listeners
+      initEventListeners();
+    });
+
+    function fetchUserData() {
+      // Simulate API call to fetch user data
+      // In a real application, this would be an actual API call
+      setTimeout(() => {
+        const userData = {
+          username: "Admin User",
+          profileImage: "https://via.placeholder.com/40",
+          notifications: 3,
+          email: "admin@hudumaq.com"
+        };
+        
+        // Update UI with user data
+        document.getElementById('username').textContent = userData.username;
+        document.getElementById('profileImage').src = userData.profileImage;
+        document.getElementById('notificationCount').textContent = userData.notifications;
+        document.getElementById('adminEmail').value = userData.email;
+      }, 500);
+    }
+
+    function fetchSystemSettings() {
+      // Simulate API call to fetch system settings
+      // In a real application, this would be an actual API call
+      setTimeout(() => {
+        const settings = {
+          organization: {
+            name: "HudumaQ",
+            logo: "https://via.placeholder.com/150",
+            timezone: "Africa/Nairobi",
+            businessHours: {
+              weekdays: { open: "08:00", close: "17:00", closed: false },
+              saturday: { open: "09:00", close: "14:00", closed: false },
+              sunday: { open: "00:00", close: "00:00", closed: true }
+            }
+          },
+          notifications: {
+            newAppointments: true,
+            appointmentReminders: true,
+            queueUpdates: true,
+            systemAlerts: true,
+            notificationEmail: "notifications@hudumaq.com",
+            emailTemplate: "default"
+          },
+          security: {
+            passwordPolicy: "medium",
+            sessionTimeout: 30,
+            twoFactorAuth: false
+          },
+          appearance: {
+            primaryColor: "#4361ee",
+            secondaryColor: "#3f37c9",
+            backgroundColor: "#f5f7fb",
+            layout: "default"
+          }
+        };
+        
+        // Update UI with settings data
+        updateGeneralSettings(settings.organization);
+        updateNotificationSettings(settings.notifications);
+        updateSecuritySettings(settings.security);
+        updateAppearanceSettings(settings.appearance);
+      }, 800);
+    }
+
+    function updateGeneralSettings(orgSettings) {
+      document.getElementById('orgName').value = orgSettings.name;
+      document.getElementById('logoPreview').src = orgSettings.logo;
+      
+      // Populate timezone dropdown
+      const timezones = [
+        { value: "Africa/Nairobi", label: "East Africa Time (EAT)" },
+        { value: "UTC", label: "UTC" },
+        { value: "America/New_York", label: "Eastern Time (ET)" }
+      ];
+      
+      const timezoneSelect = document.getElementById('timezone');
+      timezoneSelect.innerHTML = timezones.map(tz => 
+        `<option value="${tz.value}" ${tz.value === orgSettings.timezone ? 'selected' : ''}>${tz.label}</option>`
+      ).join('');
+      
+      // Populate business hours
+      const businessHoursContainer = document.getElementById('businessHours');
+      businessHoursContainer.innerHTML = `
+        <div class="day-hours">
+          <span>Monday - Friday</span>
+          <div class="time-range">
+            <input type="time" value="${orgSettings.businessHours.weekdays.open}">
+            <span>to</span>
+            <input type="time" value="${orgSettings.businessHours.weekdays.close}">
+          </div>
+        </div>
+        <div class="day-hours">
+          <span>Saturday</span>
+          <div class="time-range">
+            <input type="time" value="${orgSettings.businessHours.saturday.open}">
+            <span>to</span>
+            <input type="time" value="${orgSettings.businessHours.saturday.close}">
+          </div>
+        </div>
+        <div class="day-hours">
+          <span>Sunday</span>
+          <div class="time-range">
+            <input type="time" value="${orgSettings.businessHours.sunday.open}" ${orgSettings.businessHours.sunday.closed ? 'disabled' : ''}>
+            <span>to</span>
+            <input type="time" value="${orgSettings.businessHours.sunday.close}" ${orgSettings.businessHours.sunday.closed ? 'disabled' : ''}>
+            ${orgSettings.businessHours.sunday.closed ? '<span class="closed-label">Closed</span>' : ''}
+            <label class="switch">
+              <input type="checkbox" ${orgSettings.businessHours.sunday.closed ? 'checked' : ''}>
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateNotificationSettings(notificationSettings) {
+      const notificationContainer = document.getElementById('notificationSettings');
+      notificationContainer.innerHTML = `
+        <div class="notification-item">
+          <div class="notification-info">
+            <h4>New Appointment Bookings</h4>
+            <p>Receive notifications when new appointments are booked</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" ${notificationSettings.newAppointments ? 'checked' : ''}>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="notification-item">
+          <div class="notification-info">
+            <h4>Appointment Reminders</h4>
+            <p>Send reminders to customers before their appointments</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" ${notificationSettings.appointmentReminders ? 'checked' : ''}>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="notification-item">
+          <div class="notification-info">
+            <h4>Queue Updates</h4>
+            <p>Get notifications when queue status changes</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" ${notificationSettings.queueUpdates ? 'checked' : ''}>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="notification-item">
+          <div class="notification-info">
+            <h4>System Alerts</h4>
+            <p>Receive critical system alerts and notifications</p>
+          </div>
+          <label class="switch">
+            <input type="checkbox" ${notificationSettings.systemAlerts ? 'checked' : ''}>
+            <span class="slider round"></span>
+          </label>
+        </div>
+      `;
+      
+      document.getElementById('notificationEmail').value = notificationSettings.notificationEmail;
+      
+      // Populate email template dropdown
+      const templates = [
+        { value: "default", label: "Default Template" },
+        { value: "modern", label: "Modern Template" },
+        { value: "minimal", label: "Minimal Template" }
+      ];
+      
+      const templateSelect = document.getElementById('emailTemplate');
+      templateSelect.innerHTML = templates.map(t => 
+        `<option value="${t.value}" ${t.value === notificationSettings.emailTemplate ? 'selected' : ''}>${t.label}</option>`
+      ).join('');
+    }
+
+    function updateSecuritySettings(securitySettings) {
+      // Populate password policy dropdown
+      const policies = [
+        { value: "low", label: "Low (6 characters minimum)" },
+        { value: "medium", label: "Medium (8 characters, 1 number)" },
+        { value: "high", label: "High (10 characters, mixed case, special characters)" }
+      ];
+      
+      const policySelect = document.getElementById('passwordPolicy');
+      policySelect.innerHTML = policies.map(p => 
+        `<option value="${p.value}" ${p.value === securitySettings.passwordPolicy ? 'selected' : ''}>${p.label}</option>`
+      ).join('');
+      
+      // Populate session timeout dropdown
+      const timeouts = [
+        { value: "15", label: "15 minutes" },
+        { value: "30", label: "30 minutes" },
+        { value: "60", label: "1 hour" },
+        { value: "120", label: "2 hours" }
+      ];
+      
+      const timeoutSelect = document.getElementById('sessionTimeout');
+      timeoutSelect.innerHTML = timeouts.map(t => 
+        `<option value="${t.value}" ${t.value === securitySettings.sessionTimeout.toString() ? 'selected' : ''}>${t.label}</option>`
+      ).join('');
+      
+      document.getElementById('twoFactorAuth').checked = securitySettings.twoFactorAuth;
+    }
+
+    function updateAppearanceSettings(appearanceSettings) {
+      document.getElementById('primaryColor').value = appearanceSettings.primaryColor;
+      document.getElementById('secondaryColor').value = appearanceSettings.secondaryColor;
+      document.getElementById('backgroundColor').value = appearanceSettings.backgroundColor;
+      
+      document.getElementById('primaryColorSample').style.backgroundColor = appearanceSettings.primaryColor;
+      document.getElementById('secondaryColorSample').style.backgroundColor = appearanceSettings.secondaryColor;
+      document.getElementById('backgroundColorSample').style.backgroundColor = appearanceSettings.backgroundColor;
+      
+      document.getElementById(`layout${appearanceSettings.layout.charAt(0).toUpperCase() + appearanceSettings.layout.slice(1)}`).checked = true;
+    }
+
+    function initTabs() {
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          // Remove active class from all buttons and panes
+          document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+          document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+          
+          // Add active class to clicked button
+          button.classList.add('active');
+          
+          // Show corresponding pane
+          const tabId = button.getAttribute('data-tab');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+    }
+
+    function initProfileDropdown() {
+      const profileDropdown = document.getElementById('profileDropdown');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      
+      profileDropdown.addEventListener('click', () => {
+        dropdownMenu.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      window.addEventListener('click', (e) => {
+        if (!e.target.closest('.profile-dropdown')) {
+          dropdownMenu.classList.remove('show');
+        }
+      });
+    }
+
+    function initEventListeners() {
+      // Save settings button
+      document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+      
+      // Cancel button
+      document.getElementById('cancelBtn').addEventListener('click', resetSettings);
+      
+      // Change password button
+      document.getElementById('changePasswordBtn').addEventListener('click', changePassword);
+      
+      // Logo upload
+      document.getElementById('orgLogo').addEventListener('change', handleLogoUpload);
+      
+      // Theme color changes
+      document.getElementById('primaryColor').addEventListener('change', updateThemePreview);
+      document.getElementById('secondaryColor').addEventListener('change', updateThemePreview);
+      document.getElementById('backgroundColor').addEventListener('change', updateThemePreview);
+    }
+
+    function saveSettings() {
+      // Collect all settings data
+      const settings = {
+        organization: {
+          name: document.getElementById('orgName').value,
+          timezone: document.getElementById('timezone').value,
+          businessHours: {
+            weekdays: {
+              open: document.querySelector('#businessHours .day-hours:nth-child(1) input[type="time"]:first-child').value,
+              close: document.querySelector('#businessHours .day-hours:nth-child(1) input[type="time"]:last-child').value,
+              closed: false
+            },
+            saturday: {
+              open: document.querySelector('#businessHours .day-hours:nth-child(2) input[type="time"]:first-child').value,
+              close: document.querySelector('#businessHours .day-hours:nth-child(2) input[type="time"]:last-child').value,
+              closed: false
+            },
+            sunday: {
+              open: document.querySelector('#businessHours .day-hours:nth-child(3) input[type="time"]:first-child').value,
+              close: document.querySelector('#businessHours .day-hours:nth-child(3) input[type="time"]:last-child').value,
+              closed: document.querySelector('#businessHours .day-hours:nth-child(3) input[type="checkbox"]').checked
+            }
+          }
+        },
+        notifications: {
+          newAppointments: document.querySelector('#notificationSettings .notification-item:nth-child(1) input[type="checkbox"]').checked,
+          appointmentReminders: document.querySelector('#notificationSettings .notification-item:nth-child(2) input[type="checkbox"]').checked,
+          queueUpdates: document.querySelector('#notificationSettings .notification-item:nth-child(3) input[type="checkbox"]').checked,
+          systemAlerts: document.querySelector('#notificationSettings .notification-item:nth-child(4) input[type="checkbox"]').checked,
+          notificationEmail: document.getElementById('notificationEmail').value,
+          emailTemplate: document.getElementById('emailTemplate').value
+        },
+        security: {
+          passwordPolicy: document.getElementById('passwordPolicy').value,
+          sessionTimeout: parseInt(document.getElementById('sessionTimeout').value),
+          twoFactorAuth: document.getElementById('twoFactorAuth').checked
+        },
+        appearance: {
+          primaryColor: document.getElementById('primaryColor').value,
+          secondaryColor: document.getElementById('secondaryColor').value,
+          backgroundColor: document.getElementById('backgroundColor').value,
+          layout: document.querySelector('input[name="layout"]:checked').value
+        }
+      };
+      
+      // In a real application, this would send the data to the server
+      console.log('Saving settings:', settings);
+      alert('Settings saved successfully!');
+    }
+
+    function resetSettings() {
+      // In a real application, this would fetch the latest settings from the server
+      fetchSystemSettings();
+      alert('Changes discarded. Settings reset to previous values.');
+    }
+
+    function changePassword() {
+      const currentPassword = document.getElementById('currentPassword').value;
+      const newPassword = document.getElementById('newPassword').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('Please fill in all password fields');
+        return;
+      }
+      
+      if (newPassword !== confirmPassword) {
+        alert('New passwords do not match');
+        return;
+      }
+      
+      // In a real application, this would send the data to the server
+      console.log('Changing password:', { currentPassword, newPassword });
+      alert('Password changed successfully!');
+      
+      // Clear password fields
+      document.getElementById('currentPassword').value = '';
+      document.getElementById('newPassword').value = '';
+      document.getElementById('confirmPassword').value = '';
+    }
+
+    function handleLogoUpload(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('logoPreview').src = e.target.result;
+          
+          // In a real application, you would upload the image to the server here
+          console.log('Logo uploaded:', file.name);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function updateThemePreview() {
+      const primaryColor = document.getElementById('primaryColor').value;
+      const secondaryColor = document.getElementById('secondaryColor').value;
+      const backgroundColor = document.getElementById('backgroundColor').value;
+      
+      document.getElementById('primaryColorSample').style.backgroundColor = primaryColor;
+      document.getElementById('secondaryColorSample').style.backgroundColor = secondaryColor;
+      document.getElementById('backgroundColorSample').style.backgroundColor = backgroundColor;
+    }
+  </script>
+</body>
+</html>

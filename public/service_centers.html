@@ -1,0 +1,2033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Centers - HudumaQ Admin</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<style>
+  /* Base Styles & Variables */
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #e6e9ff;
+  --secondary-color: #3f37c9;
+  --success-color: #4cc9f0;
+  --warning-color: #f8961e;
+  --danger-color: #f94144;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fb;
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-nav li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.sidebar-nav li a i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav li a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.sidebar-nav li.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  color: var(--danger-color);
+}
+
+.logout-btn i {
+  margin-right: 10px;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-color);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.notification-bell {
+  position: relative;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.notification-bell i {
+  font-size: 1.2rem;
+  color: var(--gray-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-dropdown img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-dropdown span {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+  margin-top: 10px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: var(--dark-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.dropdown-menu a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--light-gray);
+  margin: 0.5rem 0;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.page-header p {
+  color: var(--gray-color);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  display: flex;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-danger {
+  background-color: var(--danger-color);
+}
+
+.stat-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.stat-info p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.stat-change {
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.stat-change i {
+  margin-right: 4px;
+  font-size: 0.7rem;
+}
+
+.positive {
+  color: #2ecc71;
+}
+
+.negative {
+  color: var(--danger-color);
+}
+
+.neutral {
+  color: var(--gray-color);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.action-btn i {
+  margin-right: 8px;
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Data Card */
+.data-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card-header h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
+
+.card-header h2 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: var(--gray-color);
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label i {
+  margin-right: 5px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  min-width: 150px;
+}
+
+.filter-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  align-self: flex-end;
+}
+
+.filter-btn:hover {
+  background: var(--secondary-color);
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  padding: 0 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--gray-color);
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table th i {
+  margin-left: 5px;
+  color: var(--light-gray);
+  cursor: pointer;
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.maintenance {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.action-icon {
+  background: none;
+  border: none;
+  color: var(--gray-color);
+  cursor: pointer;
+  margin-right: 10px;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.action-icon:hover {
+  color: var(--primary-color);
+}
+
+/* Card Footer */
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-info {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.table-info span {
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--light-gray);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.pagination-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Widgets Grid */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.widget {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.widget-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widget-header h3 {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.widget-header h3 i {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.widget-filter {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+}
+
+.widget-content {
+  padding: 1.5rem;
+}
+
+.pie-chart-placeholder,
+.line-chart-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-color);
+  border-radius: var(--border-radius);
+}
+
+.alert-item {
+  display: flex;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.critical {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alert-details p {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-time {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+/* Map Container */
+.map-container {
+  height: 300px;
+  width: 100%;
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+  padding: 1rem 1.5rem;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--gray-color);
+}
+
+.footer-links a {
+  margin-left: 1rem;
+  color: var(--gray-color);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.modal-header h3 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-color);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--secondary-color);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--dark-color);
+  border: 1px solid var(--light-gray);
+}
+
+.btn-secondary:hover {
+  background: var(--light-gray);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  
+  .sidebar-header .logo span,
+  .sidebar-nav li a span,
+  .logout-btn span {
+    display: none;
+  }
+  
+  .sidebar-nav li a {
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .sidebar-nav li a i {
+    margin-right: 0;
+    font-size: 1.3rem;
+  }
+  
+  .sidebar-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+  }
+  
+  .filter-btn {
+    width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination {
+    margin-top: 1rem;
+  }
+  
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .user-profile {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+}
+</style>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo">
+          <i class="fas fa-handshake"></i> HudumaQ
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="admin.html">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="appointments.html">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Appointments</span>
+            </a>
+          </li>
+          <li class="active">
+            <a href="service-centers.html">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Service Centers</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html">
+              <i class="fas fa-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="users.html">
+              <i class="fas fa-users"></i>
+              <span>Users</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="login.html" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search service centers..." id="searchInput">
+        </div>
+        
+        <div class="user-profile">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count" id="notificationCount">0</span>
+          </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <img src="https://via.placeholder.com/40" alt="Admin Profile">
+            <span>Admin User</span>
+            <i class="fas fa-chevron-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="#">
+                <i class="fas fa-user"></i> My Profile
+              </a>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i> Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="login.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <section class="dashboard-content">
+        <div class="page-header">
+          <h1><i class="fas fa-map-marker-alt"></i> Service Centers Management</h1>
+          <p>Manage all HudumaQ service centers across the country</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary">
+              <i class="fas fa-building"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalCenters">0</h3>
+              <p>Total Centers</p>
+              <span class="stat-change" id="totalCentersChange"></span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-success">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="activeCenters">0</h3>
+              <p>Active Centers</p>
+              <span class="stat-change" id="activeCentersChange"></span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-warning">
+              <i class="fas fa-tools"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="maintenanceCenters">0</h3>
+              <p>Under Maintenance</p>
+              <span class="stat-change" id="maintenanceChange"></span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-danger">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="closedCenters">0</h3>
+              <p>Temporarily Closed</p>
+              <span class="stat-change" id="closedChange"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="action-btn" id="addCenterBtn">
+            <i class="fas fa-plus"></i> Add New Center
+          </button>
+          <button class="action-btn" id="importCentersBtn">
+            <i class="fas fa-file-import"></i> Import Centers
+          </button>
+          <button class="action-btn" id="exportDataBtn">
+            <i class="fas fa-file-export"></i> Export Data
+          </button>
+          <button class="action-btn" id="refreshDataBtn">
+            <i class="fas fa-sync-alt"></i> Refresh Data
+          </button>
+        </div>
+
+        <!-- Main Data Card -->
+        <div class="data-card">
+          <div class="card-header">
+            <h2><i class="fas fa-list"></i> All Service Centers</h2>
+            
+            <div class="filter-controls">
+              <div class="filter-group">
+                <label for="regionFilter"><i class="fas fa-globe-africa"></i> Region</label>
+                <select id="regionFilter">
+                  <option value="">All Regions</option>
+                  <option value="Nairobi">Nairobi</option>
+                  <option value="Coast">Coast</option>
+                  <option value="Central">Central</option>
+                  <option value="Rift Valley">Rift Valley</option>
+                  <option value="Western">Western</option>
+                  <option value="Nyanza">Nyanza</option>
+                  <option value="Eastern">Eastern</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="statusFilter"><i class="fas fa-info-circle"></i> Status</label>
+                <select id="statusFilter">
+                  <option value="">All Statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Maintenance">Maintenance</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="servicesFilter"><i class="fas fa-concierge-bell"></i> Services</label>
+                <select id="servicesFilter">
+                  <option value="">All Services</option>
+                  <option value="ID Services">ID Services</option>
+                  <option value="Birth/Death Certs">Birth/Death Certs</option>
+                  <option value="NHIF">NHIF</option>
+                  <option value="NSSF">NSSF</option>
+                  <option value="KRA">KRA</option>
+                </select>
+              </div>
+              
+              <button class="filter-btn" id="applyFiltersBtn">
+                <i class="fas fa-filter"></i> Apply Filters
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="serviceCentersTable">
+              <thead>
+                <tr>
+                  <th>Center ID <i class="fas fa-sort"></i></th>
+                  <th>Center Name <i class="fas fa-sort"></i></th>
+                  <th>Location <i class="fas fa-sort"></i></th>
+                  <th>Region <i class="fas fa-sort"></i></th>
+                  <th>Services Offered</th>
+                  <th>Operating Hours</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="serviceCentersTableBody">
+                <!-- Data will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-footer">
+            <div class="table-info" id="tableInfo">
+              Showing <span id="showingFrom">0</span>-<span id="showingTo">0</span> of <span id="totalEntries">0</span> entries
+            </div>
+            
+            <div class="pagination" id="pagination">
+              <!-- Pagination will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Widgets -->
+        <div class="widgets-grid">
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-map-marked-alt"></i> Centers Location Map</h3>
+            </div>
+            <div class="widget-content">
+              <div class="map-container" id="centersMap">
+                <!-- Map will be rendered here -->
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-pie"></i> Centers by Region</h3>
+              <select class="widget-filter" id="chartStatusFilter">
+                <option>All Statuses</option>
+                <option>Active Only</option>
+                <option>Inactive Only</option>
+              </select>
+            </div>
+            <div class="widget-content">
+              <div class="pie-chart-placeholder" id="regionChart">
+                <!-- Chart will be rendered here -->
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-exclamation-circle"></i> Center Alerts</h3>
+            </div>
+            <div class="widget-content" id="alertsContainer">
+              <!-- Alerts will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <p>&copy; 2025 HudumaQ. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Help Center</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add Center Modal -->
+  <div class="modal" id="addCenterModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus-circle"></i> Add New Service Center</h3>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="centerForm">
+          <div class="form-group">
+            <label for="centerName">Center Name</label>
+            <input type="text" id="centerName" class="form-control" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="centerRegion">Region</label>
+              <select id="centerRegion" class="form-control" required>
+                <option value="">Select Region</option>
+                <option value="Nairobi">Nairobi</option>
+                <option value="Coast">Coast</option>
+                <option value="Central">Central</option>
+                <option value="Rift Valley">Rift Valley</option>
+                <option value="Western">Western</option>
+                <option value="Nyanza">Nyanza</option>
+                <option value="Eastern">Eastern</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="centerStatus">Status</label>
+              <select id="centerStatus" class="form-control" required>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+                <option value="Maintenance">Maintenance</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="centerAddress">Physical Address</label>
+            <input type="text" id="centerAddress" class="form-control" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="centerLatitude">Latitude</label>
+              <input type="text" id="centerLatitude" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="centerLongitude">Longitude</label>
+              <input type="text" id="centerLongitude" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="openingTime">Opening Time</label>
+              <input type="time" id="openingTime" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="closingTime">Closing Time</label>
+              <input type="time" id="closingTime" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="centerServices">Services Offered</label>
+            <select id="centerServices" class="form-control" multiple>
+              <option value="ID Services">ID Services</option>
+              <option value="Birth/Death Certs">Birth/Death Certificates</option>
+              <option value="NHIF">NHIF Services</option>
+              <option value="NSSF">NSSF Services</option>
+              <option value="KRA">KRA Services</option>
+              <option value="Passport">Passport Services</option>
+              <option value="Police Clearance">Police Clearance</option>
+            </select>
+            <small class="text-muted">Hold Ctrl/Cmd to select multiple services</small>
+          </div>
+          
+          <div class="form-group">
+            <label for="centerManager">Center Manager</label>
+            <select id="centerManager" class="form-control">
+              <option value="">Select Manager</option>
+              <option value="1">John Mwangi</option>
+              <option value="2">Sarah Akinyi</option>
+              <option value="3">David Omondi</option>
+              <option value="4">Grace Wambui</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="centerNotes">Notes</label>
+            <textarea id="centerNotes" class="form-control" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelCenter">Cancel</button>
+        <button class="btn btn-primary" id="saveCenter">Save Center</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script>  
+  let serviceCenters = [
+    {
+      id: 'SC-001',
+      name: 'Nairobi GPO',
+      location: 'Kenyatta Avenue, Nairobi CBD',
+      region: 'Nairobi',
+      services: 'All Services',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri), 8:00 AM - 1:00 PM (Sat)',
+      status: 'Active',
+      latitude: -1.2833,
+      longitude: 36.8167
+    },
+    {
+      id: 'SC-002',
+      name: 'Nairobi City Square',
+      location: 'City Hall Way, Nairobi',
+      region: 'Nairobi',
+      services: 'All Services',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri), 8:00 AM - 1:00 PM (Sat)',
+      status: 'Active',
+      latitude: -1.2864,
+      longitude: 36.8172
+    },
+    {
+      id: 'SC-003',
+      name: 'Nairobi Makadara',
+      location: 'Jogoo Road, Nairobi',
+      region: 'Nairobi',
+      services: 'ID, Birth/Death, NHIF, NSSF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -1.3000,
+      longitude: 36.8500
+    },
+    {
+      id: 'SC-004',
+      name: 'Nairobi Eastleigh',
+      location: '1st Avenue, Eastleigh',
+      region: 'Nairobi',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -1.2700,
+      longitude: 36.8400
+    },
+    {
+      id: 'SC-005',
+      name: 'Mombasa',
+      location: 'Nkrumah Road, Mombasa',
+      region: 'Coast',
+      services: 'All Services',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri), 8:00 AM - 1:00 PM (Sat)',
+      status: 'Active',
+      latitude: -4.0435,
+      longitude: 39.6682
+    },
+    {
+      id: 'SC-006',
+      name: 'Kisumu',
+      location: 'Oginga Odinga Street, Kisumu',
+      region: 'Nyanza',
+      services: 'All Services',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri), 8:00 AM - 1:00 PM (Sat)',
+      status: 'Active',
+      latitude: -0.1022,
+      longitude: 34.7617
+    },
+    {
+      id: 'SC-007',
+      name: 'Nakuru',
+      location: 'Kenyatta Avenue, Nakuru',
+      region: 'Rift Valley',
+      services: 'All Services',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri), 8:00 AM - 1:00 PM (Sat)',
+      status: 'Active',
+      latitude: -0.3031,
+      longitude: 36.0800
+    },
+    {
+      id: 'SC-008',
+      name: 'Eldoret',
+      location: 'Uganda Road, Eldoret',
+      region: 'Rift Valley',
+      services: 'ID, NHIF, NSSF, KRA',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: 0.5143,
+      longitude: 35.2698
+    },
+    {
+      id: 'SC-009',
+      name: 'Thika',
+      location: 'General Kago Road, Thika',
+      region: 'Central',
+      services: 'ID, Birth/Death, KRA, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -1.0333,
+      longitude: 37.0833
+    },
+    {
+      id: 'SC-010',
+      name: 'Nyeri',
+      location: 'Kimathi Street, Nyeri',
+      region: 'Central',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -0.4201,
+      longitude: 36.9476
+    },
+    {
+      id: 'SC-011',
+      name: 'Meru',
+      location: 'Kenyatta Highway, Meru',
+      region: 'Eastern',
+      services: 'ID, Birth/Death, NHIF, NSSF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: 0.0500,
+      longitude: 37.6500
+    },
+    {
+      id: 'SC-012',
+      name: 'Kakamega',
+      location: 'Mumias Road, Kakamega',
+      region: 'Western',
+      services: 'ID, NHIF, NSSF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: 0.2827,
+      longitude: 34.7519
+    },
+    {
+      id: 'SC-013',
+      name: 'Kisii',
+      location: 'Kisii-Migori Road, Kisii',
+      region: 'Nyanza',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -0.6833,
+      longitude: 34.7667
+    },
+    {
+      id: 'SC-014',
+      name: 'Garissa',
+      location: 'Kismayu Road, Garissa',
+      region: 'North Eastern',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 3:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -0.4536,
+      longitude: 39.6461
+    },
+    {
+      id: 'SC-015',
+      name: 'Machakos',
+      location: 'Mumbuni Road, Machakos',
+      region: 'Eastern',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -1.5167,
+      longitude: 37.2667
+    },
+    {
+      id: 'SC-016',
+      name: 'Embu',
+      location: 'Karuishi Road, Embu',
+      region: 'Eastern',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -0.5333,
+      longitude: 37.4500
+    },
+    {
+      id: 'SC-017',
+      name: 'Kericho',
+      location: 'Kericho-Kisumu Road, Kericho',
+      region: 'Rift Valley',
+      services: 'ID, NHIF, NSSF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -0.3667,
+      longitude: 35.2833
+    },
+    {
+      id: 'SC-018',
+      name: 'Kitale',
+      location: 'Kenyatta Street, Kitale',
+      region: 'Rift Valley',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: 1.0167,
+      longitude: 35.0000
+    },
+    {
+      id: 'SC-019',
+      name: 'Malindi',
+      location: 'Lamu Road, Malindi',
+      region: 'Coast',
+      services: 'ID, Birth/Death, NHIF',
+      openingHours: '7:00 AM - 5:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: -3.2167,
+      longitude: 40.1167
+    },
+    {
+      id: 'SC-020',
+      name: 'Wajir',
+      location: 'Wajir-Garissa Road, Wajir',
+      region: 'North Eastern',
+      services: 'ID, Birth/Death',
+      openingHours: '7:00 AM - 3:00 PM (Mon-Fri)',
+      status: 'Active',
+      latitude: 1.7500,
+      longitude: 40.0667
+    }
+  ];
+
+  let currentPage = 1;
+  const itemsPerPage = 7;
+  let map;
+  let markers = [];
+
+  // DOM Elements
+  const elements = {
+    searchInput: document.getElementById('searchInput'),
+    totalCenters: document.getElementById('totalCenters'),
+    activeCenters: document.getElementById('activeCenters'),
+    maintenanceCenters: document.getElementById('maintenanceCenters'),
+    closedCenters: document.getElementById('closedCenters'),
+    serviceCentersTableBody: document.getElementById('serviceCentersTableBody'),
+    tableInfo: document.getElementById('tableInfo'),
+    showingFrom: document.getElementById('showingFrom'),
+    showingTo: document.getElementById('showingTo'),
+    totalEntries: document.getElementById('totalEntries'),
+    pagination: document.getElementById('pagination'),
+    addCenterBtn: document.getElementById('addCenterBtn'),
+    importCentersBtn: document.getElementById('importCentersBtn'),
+    exportDataBtn: document.getElementById('exportDataBtn'),
+    refreshDataBtn: document.getElementById('refreshDataBtn'),
+    applyFiltersBtn: document.getElementById('applyFiltersBtn'),
+    regionFilter: document.getElementById('regionFilter'),
+    statusFilter: document.getElementById('statusFilter'),
+    servicesFilter: document.getElementById('servicesFilter'),
+    chartStatusFilter: document.getElementById('chartStatusFilter'),
+    alertsContainer: document.getElementById('alertsContainer'),
+    notificationCount: document.getElementById('notificationCount'),
+    profileDropdown: document.getElementById('profileDropdown'),
+    dropdownMenu: document.getElementById('dropdownMenu'),
+    addCenterModal: document.getElementById('addCenterModal'),
+    closeModal: document.getElementById('closeModal'),
+    cancelCenter: document.getElementById('cancelCenter'),
+    saveCenter: document.getElementById('saveCenter'),
+    centerForm: document.getElementById('centerForm')
+  };
+
+  // Initialize the application
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize event listeners
+    initEventListeners();
+    
+    // Initialize with real data
+    renderAllComponents();
+    
+    // Initialize map
+    initMap();
+    
+    // Initialize profile dropdown
+    initProfileDropdown();
+  });
+
+  function initEventListeners() {
+    // Search functionality
+    elements.searchInput.addEventListener('input', function() {
+      currentPage = 1;
+      renderServiceCenters();
+    });
+
+    // Filter functionality
+    elements.applyFiltersBtn.addEventListener('click', function() {
+      currentPage = 1;
+      renderServiceCenters();
+    });
+
+    // Chart filter
+    elements.chartStatusFilter.addEventListener('change', renderRegionChart);
+
+    // Add new center
+    elements.addCenterBtn.addEventListener('click', function() {
+      elements.addCenterModal.classList.add('show');
+    });
+
+    // Close modal
+    elements.closeModal.addEventListener('click', function() {
+      elements.addCenterModal.classList.remove('show');
+    });
+
+    elements.cancelCenter.addEventListener('click', function() {
+      elements.addCenterModal.classList.remove('show');
+    });
+
+    // Save new center
+    elements.saveCenter.addEventListener('click', function(e) {
+      e.preventDefault();
+      if (elements.centerForm.checkValidity()) {
+        addNewServiceCenter();
+        elements.addCenterModal.classList.remove('show');
+        elements.centerForm.reset();
+      } else {
+        elements.centerForm.reportValidity();
+      }
+    });
+
+    // Refresh data
+    elements.refreshDataBtn.addEventListener('click', function() {
+      renderAllComponents();
+    });
+
+    // Export data
+    elements.exportDataBtn.addEventListener('click', exportData);
+
+    // Import data
+    elements.importCentersBtn.addEventListener('click', importData);
+  }
+
+  function initProfileDropdown() {
+    elements.profileDropdown.addEventListener('click', function() {
+      elements.dropdownMenu.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking outside
+    window.addEventListener('click', function(e) {
+      if (!elements.profileDropdown.contains(e.target)) {
+        elements.dropdownMenu.classList.remove('show');
+      }
+    });
+  }
+
+  function initMap() {
+    map = L.map('centersMap').setView([-1.2921, 36.8219], 6); // Default to Kenya view
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+  }
+
+  function updateMapMarkers() {
+    // Clear existing markers
+    markers.forEach(marker => map.removeLayer(marker));
+    markers = [];
+
+    // Add new markers for each service center
+    serviceCenters.forEach(center => {
+      if (center.latitude && center.longitude) {
+        const marker = L.marker([center.latitude, center.longitude])
+          .addTo(map)
+          .bindPopup(`<b>${center.name}</b><br>${center.location}<br>Status: ${center.status}`);
+        markers.push(marker);
+      }
+    });
+
+    // Fit map to show all markers if there are any
+    if (markers.length > 0) {
+      const group = new L.featureGroup(markers);
+      map.fitBounds(group.getBounds());
+    }
+  }
+
+  function renderAllComponents() {
+    updateStats();
+    renderServiceCenters();
+    renderRegionChart();
+    updateMapMarkers();
+  }
+
+  function updateStats() {
+    const total = serviceCenters.length;
+    const active = serviceCenters.filter(c => c.status === 'Active').length;
+    const maintenance = serviceCenters.filter(c => c.status === 'Maintenance').length;
+    const inactive = serviceCenters.filter(c => c.status === 'Inactive').length;
+
+    elements.totalCenters.textContent = total;
+    elements.activeCenters.textContent = active;
+    elements.maintenanceCenters.textContent = maintenance;
+    elements.closedCenters.textContent = inactive;
+
+    
+    elements.notificationCount.textContent = maintenance;
+  }
+
+  function renderServiceCenters() {
+    const searchTerm = elements.searchInput.value.toLowerCase();
+    const regionFilter = elements.regionFilter.value;
+    const statusFilter = elements.statusFilter.value;
+    const servicesFilter = elements.servicesFilter.value;
+
+    
+    let filteredCenters = serviceCenters.filter(center => {
+      const matchesSearch = 
+        center.id.toLowerCase().includes(searchTerm) ||
+        center.name.toLowerCase().includes(searchTerm) ||
+        center.location.toLowerCase().includes(searchTerm) ||
+        center.region.toLowerCase().includes(searchTerm);
+      
+      const matchesRegion = regionFilter ? center.region === regionFilter : true;
+      const matchesStatus = statusFilter ? center.status === statusFilter : true;
+      const matchesServices = servicesFilter ? center.services.includes(servicesFilter) : true;
+
+      return matchesSearch && matchesRegion && matchesStatus && matchesServices;
+    });
+
+    // Update table info
+    elements.totalEntries.textContent = filteredCenters.length;
+    
+    // Pagination
+    const totalPages = Math.ceil(filteredCenters.length / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, filteredCenters.length);
+    const paginatedCenters = filteredCenters.slice(startIndex, endIndex);
+
+    elements.showingFrom.textContent = startIndex + 1;
+    elements.showingTo.textContent = endIndex;
+
+    
+    elements.serviceCentersTableBody.innerHTML = '';
+    paginatedCenters.forEach(center => {
+      const row = document.createElement('tr');
+      
+      row.innerHTML = `
+        <td>${center.id}</td>
+        <td>${center.name}</td>
+        <td>${center.location}</td>
+        <td>${center.region}</td>
+        <td>${center.services}</td>
+        <td>${center.openingHours}</td>
+        <td><span class="status-badge ${center.status.toLowerCase()}">${center.status}</span></td>
+        <td>
+          <button class="action-icon" title="View Details">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="action-icon" title="Edit">
+            <i class="fas fa-edit"></i>
+          </button>
+          <button class="action-icon" title="Manage Staff">
+            <i class="fas fa-users-cog"></i>
+          </button>
+        </td>
+      `;
+      
+      elements.serviceCentersTableBody.appendChild(row);
+    });
+
+    
+    renderPagination(totalPages);
+  }
+
+  function renderPagination(totalPages) {
+    elements.pagination.innerHTML = '';
+    
+    
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'pagination-btn';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.innerHTML = '<i class="fas fa-chevron-left"></i>';
+    prevBtn.addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        renderServiceCenters();
+      }
+    });
+    elements.pagination.appendChild(prevBtn);
+    
+    
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      const pageBtn = document.createElement('button');
+      pageBtn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+      pageBtn.textContent = i;
+      pageBtn.addEventListener('click', () => {
+        currentPage = i;
+        renderServiceCenters();
+      });
+      elements.pagination.appendChild(pageBtn);
+    }
+    
+    
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'pagination-btn';
+    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+    nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+    nextBtn.addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderServiceCenters();
+      }
+    });
+    elements.pagination.appendChild(nextBtn);
+  }
+
+  function renderRegionChart() {
+    const filter = elements.chartStatusFilter.value;
+    
+    
+    let filteredCenters = serviceCenters;
+    if (filter === 'Active Only') {
+      filteredCenters = serviceCenters.filter(c => c.status === 'Active');
+    } else if (filter === 'Inactive Only') {
+      filteredCenters = serviceCenters.filter(c => c.status === 'Inactive');
+    }
+    
+    
+    const regions = {};
+    filteredCenters.forEach(center => {
+      if (!regions[center.region]) {
+        regions[center.region] = 0;
+      }
+      regions[center.region]++;
+    });
+    
+    
+    const chartData = Object.entries(regions).map(([region, count]) => ({
+      region,
+      count
+    }));
+    
+    
+    chartData.sort((a, b) => b.count - a.count);
+    
+    
+    const chartHtml = chartData.length > 0 
+      ? chartData.map(item => `<div>${item.region}: ${item.count} centers</div>`).join('')
+      : '<div>No data available for the selected filter</div>';
+    
+    elements.regionChart.innerHTML = chartHtml;
+  }
+
+  function renderAlerts(alerts) {
+    elements.alertsContainer.innerHTML = '';
+    
+    alerts.forEach(alert => {
+      const alertItem = document.createElement('div');
+      alertItem.className = 'alert-item';
+      
+      alertItem.innerHTML = `
+        <div class="alert-icon ${alert.type}">
+          <i class="fas fa-${getAlertIcon(alert.type)}"></i>
+        </div>
+        <div class="alert-details">
+          <p>${alert.message}</p>
+          <span class="alert-time">${alert.time}</span>
+        </div>
+      `;
+      
+      elements.alertsContainer.appendChild(alertItem);
+    });
+  }
+
+  function getAlertIcon(type) {
+    switch(type) {
+      case 'critical': return 'exclamation-triangle';
+      case 'warning': return 'clock';
+      case 'info': return 'info-circle';
+      default: return 'info-circle';
+    }
+  }
+
+  function addNewServiceCenter() {
+    const name = elements.centerName.value;
+    const region = elements.centerRegion.value;
+    const status = elements.centerStatus.value;
+    const address = elements.centerAddress.value;
+    const latitude = parseFloat(elements.centerLatitude.value);
+    const longitude = parseFloat(elements.centerLongitude.value);
+    const openingTime = elements.openingTime.value;
+    const closingTime = elements.closingTime.value;
+    
+    
+    const servicesSelect = elements.centerServices;
+    const selectedServices = [];
+    for (let i = 0; i < servicesSelect.options.length; i++) {
+      if (servicesSelect.options[i].selected) {
+        selectedServices.push(servicesSelect.options[i].value);
+      }
+    }
+    const services = selectedServices.join(', ');
+    
+    
+    const newId = `SC-${String(serviceCenters.length + 1).padStart(3, '0')}`;
+    
+    
+    const newCenter = {
+      id: newId,
+      name,
+      location: address,
+      region,
+      services,
+      openingHours: `${formatTime(openingTime)} - ${formatTime(closingTime)}`,
+      status,
+      latitude,
+      longitude
+    };
+    
+    
+    serviceCenters.unshift(newCenter);
+    
+    
+    renderAllComponents();
+  }
+
+  function formatTime(timeString) {
+    if (!timeString) return '';
+    
+    
+    const [hours, minutes] = timeString.split(':');
+    const hourNum = parseInt(hours, 10);
+    
+    if (hourNum === 0) {
+      return `12:${minutes} AM`;
+    } else if (hourNum < 12) {
+      return `${hourNum}:${minutes} AM`;
+    } else if (hourNum === 12) {
+      return `12:${minutes} PM`;
+    } else {
+      return `${hourNum - 12}:${minutes} PM`;
+    }
+  }
+
+  function exportData() {  
+    alert('Export functionality would generate a file with all service center data');
+  }
+
+  function importData() {
+    alert('Import functionality would allow uploading a file to add new centers');
+  }
+</script>
+</body>
+</html>

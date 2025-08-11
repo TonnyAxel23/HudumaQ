@@ -1,0 +1,1974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users - HudumaQ Admin</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<style>
+  /* Base Styles & Variables */
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #e6e9ff;
+  --secondary-color: #3f37c9;
+  --success-color: #4cc9f0;
+  --warning-color: #f8961e;
+  --danger-color: #f94144;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fb;
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-nav li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.sidebar-nav li a i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav li a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.sidebar-nav li.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  color: var(--danger-color);
+}
+
+.logout-btn i {
+  margin-right: 10px;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-color);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.notification-bell {
+  position: relative;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.notification-bell i {
+  font-size: 1.2rem;
+  color: var(--gray-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-dropdown img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-dropdown span {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+  margin-top: 10px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: var(--dark-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.dropdown-menu a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--light-gray);
+  margin: 0.5rem 0;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.page-header p {
+  color: var(--gray-color);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  display: flex;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-danger {
+  background-color: var(--danger-color);
+}
+
+.stat-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.stat-info p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.stat-change {
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.stat-change i {
+  margin-right: 4px;
+  font-size: 0.7rem;
+}
+
+.positive {
+  color: #2ecc71;
+}
+
+.negative {
+  color: var(--danger-color);
+}
+
+.neutral {
+  color: var(--gray-color);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.action-btn i {
+  margin-right: 8px;
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Data Card */
+.data-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card-header h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
+
+.card-header h2 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: var(--gray-color);
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label i {
+  margin-right: 5px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  min-width: 150px;
+}
+
+.filter-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  align-self: flex-end;
+}
+
+.filter-btn:hover {
+  background: var(--secondary-color);
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  padding: 0 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--gray-color);
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table th i {
+  margin-left: 5px;
+  color: var(--light-gray);
+  cursor: pointer;
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.active {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.inactive {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.pending {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.action-icon {
+  background: none;
+  border: none;
+  color: var(--gray-color);
+  cursor: pointer;
+  margin-right: 10px;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.action-icon:hover {
+  color: var(--primary-color);
+}
+
+/* Card Footer */
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-info {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.table-info span {
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--light-gray);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.pagination-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Widgets Grid */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.widget {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.widget-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widget-header h3 {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.widget-header h3 i {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.widget-filter {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+}
+
+.widget-content {
+  padding: 1.5rem;
+}
+
+.pie-chart-placeholder,
+.line-chart-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-color);
+  border-radius: var(--border-radius);
+}
+
+.alert-item {
+  display: flex;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.critical {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alert-details p {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-time {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+  padding: 1rem 1.5rem;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--gray-color);
+}
+
+.footer-links a {
+  margin-left: 1rem;
+  color: var(--gray-color);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.modal-header h3 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-color);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--secondary-color);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--dark-color);
+  border: 1px solid var(--light-gray);
+}
+
+.btn-secondary:hover {
+  background: var(--light-gray);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  
+  .sidebar-header .logo span,
+  .sidebar-nav li a span,
+  .logout-btn span {
+    display: none;
+  }
+  
+  .sidebar-nav li a {
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .sidebar-nav li a i {
+    margin-right: 0;
+    font-size: 1.3rem;
+  }
+  
+  .sidebar-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+  }
+  
+  .filter-btn {
+    width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination {
+    margin-top: 1rem;
+  }
+  
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .user-profile {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+}
+</style>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo">
+          <i class="fas fa-handshake"></i> HudumaQ
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="admin.html">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="appointments.html">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Appointments</span>
+            </a>
+          </li>
+          <li>
+            <a href="service-centers.html">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Service Centers</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html">
+              <i class="fas fa-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li class="active">
+            <a href="users.html">
+              <i class="fas fa-users"></i>
+              <span>Users</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="login.html" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search users..." id="userSearch">
+        </div>
+        
+        <div class="user-profile">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count" id="notificationCount">0</span>
+          </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <img src="https://via.placeholder.com/40" alt="Admin Profile">
+            <span id="adminName">Loading...</span>
+            <i class="fas fa-chevron-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="#">
+                <i class="fas fa-user"></i> My Profile
+              </a>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i> Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="login.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <section class="dashboard-content">
+        <div class="page-header">
+          <h1><i class="fas fa-users"></i> User Management</h1>
+          <p>Manage all system users and their permissions</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalUsers">0</h3>
+              <p>Total Users</p>
+              <span class="stat-change" id="totalUsersChange">
+                <i class="fas fa-arrow-up"></i> Loading...
+              </span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-success">
+              <i class="fas fa-user-check"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="activeUsers">0</h3>
+              <p>Active Users</p>
+              <span class="stat-change" id="activeUsersChange">
+                <i class="fas fa-arrow-up"></i> Loading...
+              </span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-warning">
+              <i class="fas fa-user-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="pendingUsers">0</h3>
+              <p>Pending Approval</p>
+              <span class="stat-change" id="pendingUsersChange">
+                <i class="fas fa-arrow-up"></i> Loading...
+              </span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-danger">
+              <i class="fas fa-user-slash"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="inactiveUsers">0</h3>
+              <p>Inactive Users</p>
+              <span class="stat-change" id="inactiveUsersChange">
+                <i class="fas fa-equals"></i> Loading...
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="action-btn" id="addUserBtn">
+            <i class="fas fa-user-plus"></i> Add New User
+          </button>
+          <button class="action-btn" id="bulkImportBtn">
+            <i class="fas fa-file-import"></i> Bulk Import
+          </button>
+          <button class="action-btn" id="exportUsersBtn">
+            <i class="fas fa-file-export"></i> Export Users
+          </button>
+          <button class="action-btn" id="refreshDataBtn">
+            <i class="fas fa-sync-alt"></i> Refresh Data
+          </button>
+        </div>
+
+        <!-- Main Data Card -->
+        <div class="data-card">
+          <div class="card-header">
+            <h2><i class="fas fa-list"></i> All Users</h2>
+            
+            <div class="filter-controls">
+              <div class="filter-group">
+                <label for="userRoleFilter"><i class="fas fa-user-tag"></i> Role</label>
+                <select id="userRoleFilter">
+                  <option value="">All Roles</option>
+                  <option value="Administrator">Administrator</option>
+                  <option value="Center Manager">Center Manager</option>
+                  <option value="Service Agent">Service Agent</option>
+                  <option value="Support Staff">Support Staff</option>
+                  <option value="Customer">Customer</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="userStatusFilter"><i class="fas fa-info-circle"></i> Status</label>
+                <select id="userStatusFilter">
+                  <option value="">All Statuses</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Pending">Pending</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="userCenterFilter"><i class="fas fa-map-marker-alt"></i> Center</label>
+                <select id="userCenterFilter">
+                  <option value="">All Centers</option>
+                  <option value="Nairobi GPO">Nairobi GPO</option>
+                  <option value="Mombasa">Mombasa</option>
+                  <option value="Kisumu">Kisumu</option>
+                  <option value="Nakuru">Nakuru</option>
+                  <option value="Eldoret">Eldoret</option>
+                </select>
+              </div>
+              
+              <button class="filter-btn" id="applyFiltersBtn">
+                <i class="fas fa-filter"></i> Apply Filters
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="usersTable">
+              <thead>
+                <tr>
+                  <th>User ID <i class="fas fa-sort"></i></th>
+                  <th>Full Name <i class="fas fa-sort"></i></th>
+                  <th>Email <i class="fas fa-sort"></i></th>
+                  <th>Role <i class="fas fa-sort"></i></th>
+                  <th>Center <i class="fas fa-sort"></i></th>
+                  <th>Last Login <i class="fas fa-sort"></i></th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <!-- Users will be loaded here dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-footer">
+            <div class="table-info" id="tableInfo">
+              Showing <span>0-0</span> of <span>0</span> entries
+            </div>
+            
+            <div class="pagination" id="pagination">
+              <button class="pagination-btn" disabled id="prevPageBtn">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn" id="nextPageBtn">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Widgets -->
+        <div class="widgets-grid">
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-pie"></i> User Roles Distribution</h3>
+            </div>
+            <div class="widget-content">
+              <div class="pie-chart-placeholder" id="rolesChart">
+                <canvas id="rolesPieChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-line"></i> User Signups</h3>
+              <select class="widget-filter" id="signupsTimeFilter">
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+                <option value="365">Last 12 Months</option>
+              </select>
+            </div>
+            <div class="widget-content">
+              <div class="line-chart-placeholder" id="signupsChart">
+                <canvas id="signupsLineChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-exclamation-circle"></i> Recent User Activity</h3>
+            </div>
+            <div class="widget-content" id="recentActivity">
+              <!-- Activity will be loaded here dynamically -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <p>&copy; 2025 HudumaQ. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Help Center</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add User Modal -->
+  <div class="modal" id="addUserModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-user-plus"></i> Add New User</h3>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="userForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="userEmail">Email Address</label>
+            <input type="email" id="userEmail" class="form-control" required>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="userRole">Role</label>
+              <select id="userRole" class="form-control" required>
+                <option value="">Select Role</option>
+                <option value="Administrator">Administrator</option>
+                <option value="Center Manager">Center Manager</option>
+                <option value="Service Agent">Service Agent</option>
+                <option value="Support Staff">Support Staff</option>
+                <option value="Customer">Customer</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="userCenter">Assigned Center (if applicable)</label>
+              <select id="userCenter" class="form-control">
+                <option value="">Select Center</option>
+                <option value="Nairobi GPO">Nairobi GPO</option>
+                <option value="Mombasa">Mombasa</option>
+                <option value="Kisumu">Kisumu</option>
+                <option value="Nakuru">Nakuru</option>
+                <option value="Eldoret">Eldoret</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="userPassword">Password</label>
+              <input type="password" id="userPassword" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" id="confirmPassword" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="userStatus">Status</label>
+            <select id="userStatus" class="form-control" required>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
+              <option value="Pending">Pending Approval</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label for="userNotes">Notes (optional)</label>
+            <textarea id="userNotes" class="form-control" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelUser">Cancel</button>
+        <button class="btn btn-primary" id="saveUser">Save User</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Global variables
+    let allUsers = [];
+    let filteredUsers = [];
+    let currentPage = 1;
+    const usersPerPage = 7;
+    let rolesChart = null;
+    let signupsChart = null;
+
+    // DOM Content Loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize components
+      initModal();
+      initProfileDropdown();
+      initCharts();
+      
+      // Load data
+      loadAdminProfile();
+      loadUsers();
+      loadNotifications();
+      loadRecentActivity();
+      
+      // Event listeners
+      document.getElementById('refreshDataBtn').addEventListener('click', refreshData);
+      document.getElementById('applyFiltersBtn').addEventListener('click', applyFilters);
+      document.getElementById('userSearch').addEventListener('input', searchUsers);
+      document.getElementById('prevPageBtn').addEventListener('click', goToPrevPage);
+      document.getElementById('nextPageBtn').addEventListener('click', goToNextPage);
+      document.getElementById('signupsTimeFilter').addEventListener('change', updateSignupsChart);
+    });
+
+    // Initialize modal functionality
+    function initModal() {
+      const addUserBtn = document.getElementById('addUserBtn');
+      const addUserModal = document.getElementById('addUserModal');
+      const closeModalBtn = document.getElementById('closeModal');
+      const cancelUserBtn = document.getElementById('cancelUser');
+      
+      // Open modal
+      addUserBtn.addEventListener('click', function() {
+        addUserModal.classList.add('show');
+      });
+      
+      // Close modal
+      function closeModal() {
+        addUserModal.classList.remove('show');
+      }
+      
+      closeModalBtn.addEventListener('click', closeModal);
+      cancelUserBtn.addEventListener('click', closeModal);
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', function(event) {
+        if (event.target === addUserModal) {
+          closeModal();
+        }
+      });
+      
+      // Save user
+      document.getElementById('saveUser').addEventListener('click', function() {
+        const password = document.getElementById('userPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (password !== confirmPassword) {
+          alert('Passwords do not match!');
+          return;
+        }
+        
+        // Here you would typically send the data to your backend
+        const newUser = {
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          email: document.getElementById('userEmail').value,
+          role: document.getElementById('userRole').value,
+          center: document.getElementById('userCenter').value,
+          status: document.getElementById('userStatus').value,
+          notes: document.getElementById('userNotes').value
+        };
+        
+        // Simulate API call
+        setTimeout(() => {
+          alert('User saved successfully!');
+          closeModal();
+          document.getElementById('userForm').reset();
+          loadUsers(); // Refresh the user list
+        }, 500);
+      });
+    }
+
+    // Initialize profile dropdown
+    function initProfileDropdown() {
+      const profileDropdown = document.getElementById('profileDropdown');
+      const dropdownMenu = document.getElementById('dropdownMenu');
+      
+      profileDropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdownMenu.classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function() {
+        dropdownMenu.classList.remove('show');
+      });
+      
+      // Prevent dropdown from closing when clicking inside it
+      dropdownMenu.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    }
+
+    // Initialize charts
+    function initCharts() {
+      const rolesCtx = document.getElementById('rolesPieChart').getContext('2d');
+      rolesChart = new Chart(rolesCtx, {
+        type: 'pie',
+        data: {
+          labels: ['Administrators', 'Center Managers', 'Service Agents', 'Support Staff', 'Customers'],
+          datasets: [{
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: [
+              '#4361ee',
+              '#3f37c9',
+              '#4cc9f0',
+              '#f8961e',
+              '#6c757d'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+
+      const signupsCtx = document.getElementById('signupsLineChart').getContext('2d');
+      signupsChart = new Chart(signupsCtx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'User Signups',
+            data: [],
+            borderColor: '#4361ee',
+            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Load admin profile data
+    function loadAdminProfile() {
+      // Simulate API call to get admin profile
+      setTimeout(() => {
+        document.getElementById('adminName').textContent = 'Admin User';
+      }, 300);
+    }
+
+    // Load users data
+    function loadUsers() {
+      // Simulate API call to get users
+      setTimeout(() => {
+        // This would come from your actual API
+        const mockUsers = [
+          {
+            id: 'USR-001',
+            firstName: 'John',
+            lastName: 'Mwangi',
+            email: 'john.mwangi@example.com',
+            role: 'Administrator',
+            center: 'All Centers',
+            lastLogin: '2025-07-22 09:15 AM',
+            status: 'Active',
+            avatar: 'https://via.placeholder.com/40'
+          },
+          {
+            id: 'USR-002',
+            firstName: 'Sarah',
+            lastName: 'Akinyi',
+            email: 'sarah.akinyi@example.com',
+            role: 'Center Manager',
+            center: 'Nairobi GPO',
+            lastLogin: '2025-07-21 02:30 PM',
+            status: 'Active',
+            avatar: 'https://via.placeholder.com/40'
+          },
+          {
+            id: 'USR-003',
+            firstName: 'David',
+            lastName: 'Omondi',
+            email: 'david.omondi@example.com',
+            role: 'Service Agent',
+            center: 'Mombasa',
+            lastLogin: '2025-07-20 11:45 AM',
+            status: 'Active',
+            avatar: 'https://via.placeholder.com/40'
+          },
+          {
+            id: 'USR-004',
+            firstName: 'Grace',
+            lastName: 'Wambui',
+            email: 'grace.wambui@example.com',
+            role: 'Support Staff',
+            center: 'Kisumu',
+            lastLogin: '2025-07-19 10:20 AM',
+            status: 'Inactive',
+            avatar: 'https://via.placeholder.com/40'
+          },
+          {
+            id: 'USR-005',
+            firstName: 'Michael',
+            lastName: 'Kamau',
+            email: 'michael.kamau@example.com',
+            role: 'Service Agent',
+            center: 'Nakuru',
+            lastLogin: '2025-07-18 03:15 PM',
+            status: 'Pending',
+            avatar: 'https://via.placeholder.com/40'
+          },
+          {
+            id: 'USR-006',
+            firstName: 'Elizabeth',
+            lastName: 'Njeri',
+            email: 'elizabeth.njeri@example.com',
+            role: 'Customer',
+            center: 'N/A',
+            lastLogin: '2025-07-17 09:30 AM',
+            status: 'Active',
+            avatar: 'https://via.placeholder.com/40'
+          },
+          {
+            id: 'USR-007',
+            firstName: 'James',
+            lastName: 'Mutua',
+            email: 'james.mutua@example.com',
+            role: 'Center Manager',
+            center: 'Eldoret',
+            lastLogin: '2025-07-16 01:45 PM',
+            status: 'Active',
+            avatar: 'https://via.placeholder.com/40'
+          }
+        ];
+
+        allUsers = mockUsers;
+        filteredUsers = [...allUsers];
+        updateUserStats();
+        renderUsersTable();
+        updateRolesChart();
+        updateSignupsChart();
+      }, 500);
+    }
+
+    // Update user statistics
+    function updateUserStats() {
+      const total = allUsers.length;
+      const active = allUsers.filter(user => user.status === 'Active').length;
+      const pending = allUsers.filter(user => user.status === 'Pending').length;
+      const inactive = allUsers.filter(user => user.status === 'Inactive').length;
+
+      document.getElementById('totalUsers').textContent = total;
+      document.getElementById('activeUsers').textContent = active;
+      document.getElementById('pendingUsers').textContent = pending;
+      document.getElementById('inactiveUsers').textContent = inactive;
+
+      // Update change indicators (simplified for demo)
+      document.getElementById('totalUsersChange').innerHTML = '<i class="fas fa-arrow-up"></i> ' + Math.floor(total * 0.1) + ' new this month';
+      document.getElementById('activeUsersChange').innerHTML = '<i class="fas fa-arrow-up"></i> ' + Math.floor(active * 0.05) + ' more than last month';
+      document.getElementById('pendingUsersChange').innerHTML = '<i class="fas fa-arrow-up"></i> ' + Math.floor(pending * 0.2) + ' more than yesterday';
+      document.getElementById('inactiveUsersChange').innerHTML = '<i class="fas fa-equals"></i> Same as last week';
+    }
+
+    // Render users table
+    function renderUsersTable() {
+      const tableBody = document.getElementById('usersTableBody');
+      tableBody.innerHTML = '';
+
+      // Calculate pagination
+      const startIndex = (currentPage - 1) * usersPerPage;
+      const endIndex = Math.min(startIndex + usersPerPage, filteredUsers.length);
+      const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+      // Update table info
+      document.getElementById('tableInfo').innerHTML = 
+        `Showing <span>${startIndex + 1}-${endIndex}</span> of <span>${filteredUsers.length}</span> entries`;
+
+      // Update pagination buttons
+      updatePaginationButtons();
+
+      // Add rows to table
+      paginatedUsers.forEach(user => {
+        const row = document.createElement('tr');
+        
+        // Determine action buttons based on status
+        let actionButtons = '';
+        if (user.status === 'Active') {
+          actionButtons = `
+            <button class="action-icon" title="Edit" onclick="editUser('${user.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-icon" title="Permissions" onclick="managePermissions('${user.id}')">
+              <i class="fas fa-key"></i>
+            </button>
+            <button class="action-icon" title="Deactivate" onclick="toggleUserStatus('${user.id}', 'Inactive')">
+              <i class="fas fa-user-slash"></i>
+            </button>
+          `;
+        } else if (user.status === 'Inactive') {
+          actionButtons = `
+            <button class="action-icon" title="Edit" onclick="editUser('${user.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-icon" title="Permissions" onclick="managePermissions('${user.id}')">
+              <i class="fas fa-key"></i>
+            </button>
+            <button class="action-icon" title="Activate" onclick="toggleUserStatus('${user.id}', 'Active')">
+              <i class="fas fa-user-check"></i>
+            </button>
+          `;
+        } else if (user.status === 'Pending') {
+          actionButtons = `
+            <button class="action-icon" title="Edit" onclick="editUser('${user.id}')">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-icon" title="Approve" onclick="toggleUserStatus('${user.id}', 'Active')">
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="action-icon" title="Reject" onclick="toggleUserStatus('${user.id}', 'Inactive')">
+              <i class="fas fa-times"></i>
+            </button>
+          `;
+        }
+
+        row.innerHTML = `
+          <td>${user.id}</td>
+          <td>
+            <div class="user-avatar">
+              <img src="${user.avatar}" alt="User Avatar" style="width:30px;height:30px;border-radius:50%;margin-right:10px;">
+              ${user.firstName} ${user.lastName}
+            </div>
+          </td>
+          <td>${user.email}</td>
+          <td>${user.role}</td>
+          <td>${user.center}</td>
+          <td>${user.lastLogin}</td>
+          <td><span class="status-badge ${user.status.toLowerCase()}">${user.status}</span></td>
+          <td>${actionButtons}</td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Update pagination buttons
+    function updatePaginationButtons() {
+      const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+      const paginationDiv = document.getElementById('pagination');
+      
+      // Clear existing buttons (except prev/next)
+      paginationDiv.innerHTML = `
+        <button class="pagination-btn" ${currentPage === 1 ? 'disabled' : ''} id="prevPageBtn">
+          <i class="fas fa-chevron-left"></i>
+        </button>
+      `;
+      
+      // Add page number buttons
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.className = `pagination-btn ${i === currentPage ? 'active' : ''}`;
+        btn.textContent = i;
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderUsersTable();
+        });
+        paginationDiv.appendChild(btn);
+      }
+      
+      // Add next button
+      const nextBtn = document.createElement('button');
+      nextBtn.className = `pagination-btn ${currentPage === totalPages ? 'disabled' : ''}`;
+      nextBtn.id = 'nextPageBtn';
+      nextBtn.innerHTML = '<i class="fas fa-chevron-right"></i>';
+      nextBtn.addEventListener('click', goToNextPage);
+      paginationDiv.appendChild(nextBtn);
+      
+      // Update prev button event
+      document.getElementById('prevPageBtn').addEventListener('click', goToPrevPage);
+    }
+
+    // Go to previous page
+    function goToPrevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        renderUsersTable();
+      }
+    }
+
+    // Go to next page
+    function goToNextPage() {
+      const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        renderUsersTable();
+      }
+    }
+
+    // Apply filters
+    function applyFilters() {
+      const roleFilter = document.getElementById('userRoleFilter').value;
+      const statusFilter = document.getElementById('userStatusFilter').value;
+      const centerFilter = document.getElementById('userCenterFilter').value;
+      
+      filteredUsers = allUsers.filter(user => {
+        return (roleFilter === '' || user.role === roleFilter) &&
+               (statusFilter === '' || user.status === statusFilter) &&
+               (centerFilter === '' || user.center === centerFilter);
+      });
+      
+      currentPage = 1;
+      renderUsersTable();
+    }
+
+    // Search users
+    function searchUsers() {
+      const searchTerm = document.getElementById('userSearch').value.toLowerCase();
+      
+      if (searchTerm === '') {
+        filteredUsers = [...allUsers];
+      } else {
+        filteredUsers = allUsers.filter(user => 
+          user.id.toLowerCase().includes(searchTerm) ||
+          user.firstName.toLowerCase().includes(searchTerm) ||
+          user.lastName.toLowerCase().includes(searchTerm) ||
+          user.email.toLowerCase().includes(searchTerm) ||
+          user.role.toLowerCase().includes(searchTerm) ||
+          user.center.toLowerCase().includes(searchTerm)
+        );
+      }
+      
+      currentPage = 1;
+      renderUsersTable();
+    }
+
+    // Update roles chart
+    function updateRolesChart() {
+      if (!rolesChart) return;
+      
+      const roleCounts = {
+        'Administrator': 0,
+        'Center Manager': 0,
+        'Service Agent': 0,
+        'Support Staff': 0,
+        'Customer': 0
+      };
+      
+      allUsers.forEach(user => {
+        roleCounts[user.role] = (roleCounts[user.role] || 0) + 1;
+      });
+      
+      rolesChart.data.datasets[0].data = [
+        roleCounts['Administrator'],
+        roleCounts['Center Manager'],
+        roleCounts['Service Agent'],
+        roleCounts['Support Staff'],
+        roleCounts['Customer']
+      ];
+      
+      rolesChart.update();
+    }
+
+    // Update signups chart
+    function updateSignupsChart() {
+      if (!signupsChart) return;
+      
+      const days = parseInt(document.getElementById('signupsTimeFilter').value);
+      const labels = [];
+      const data = [];
+      
+      // Generate mock data for the selected time period
+      for (let i = days; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        labels.push(date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+        data.push(Math.floor(Math.random() * 5)); // Random signups for demo
+      }
+      
+      signupsChart.data.labels = labels;
+      signupsChart.data.datasets[0].data = data;
+      signupsChart.update();
+    }
+
+    // Load notifications
+    function loadNotifications() {
+      // Simulate API call to get notifications
+      setTimeout(() => {
+        document.getElementById('notificationCount').textContent = '3';
+      }, 400);
+    }
+
+    // Load recent activity
+    function loadRecentActivity() {
+      const activityContainer = document.getElementById('recentActivity');
+      
+      // Simulate API call to get recent activity
+      setTimeout(() => {
+        const activities = [
+          {
+            type: 'info',
+            icon: 'fa-user-plus',
+            message: '5 new user signups in the last 24 hours',
+            time: '2 hours ago'
+          },
+          {
+            type: 'warning',
+            icon: 'fa-user-lock',
+            message: '3 failed login attempts for user USR-004',
+            time: '5 hours ago'
+          },
+          {
+            type: 'critical',
+            icon: 'fa-user-slash',
+            message: 'User USR-009 account deactivated',
+            time: '1 day ago'
+          }
+        ];
+        
+        activityContainer.innerHTML = '';
+        
+        activities.forEach(activity => {
+          const item = document.createElement('div');
+          item.className = 'alert-item';
+          
+          item.innerHTML = `
+            <div class="alert-icon ${activity.type}">
+              <i class="fas ${activity.icon}"></i>
+            </div>
+            <div class="alert-details">
+              <p>${activity.message}</p>
+              <span class="alert-time">${activity.time}</span>
+            </div>
+          `;
+          
+          activityContainer.appendChild(item);
+        });
+      }, 600);
+    }
+
+    // Refresh all data
+    function refreshData() {
+      loadUsers();
+      loadNotifications();
+      loadRecentActivity();
+    }
+
+    // User management functions (would be connected to backend in real app)
+    function editUser(userId) {
+      const user = allUsers.find(u => u.id === userId);
+      if (user) {
+        // Fill the modal with user data
+        document.getElementById('firstName').value = user.firstName;
+        document.getElementById('lastName').value = user.lastName;
+        document.getElementById('userEmail').value = user.email;
+        document.getElementById('userRole').value = user.role;
+        document.getElementById('userCenter').value = user.center;
+        document.getElementById('userStatus').value = user.status;
+        document.getElementById('userNotes').value = user.notes || '';
+        
+        // Change modal title
+        document.querySelector('#addUserModal .modal-header h3').innerHTML = 
+          '<i class="fas fa-user-edit"></i> Edit User';
+        
+        // Show modal
+        document.getElementById('addUserModal').classList.add('show');
+      }
+    }
+
+    function toggleUserStatus(userId, newStatus) {
+      // In a real app, this would call your API
+      const userIndex = allUsers.findIndex(u => u.id === userId);
+      if (userIndex !== -1) {
+        allUsers[userIndex].status = newStatus;
+        renderUsersTable();
+        updateUserStats();
+        updateRolesChart();
+      }
+    }
+
+    function managePermissions(userId) {
+      alert(`Manage permissions for user ${userId}`);
+      // In a real app, this would open a permissions management modal
+    }
+
+    // Make functions available globally for button clicks
+    window.editUser = editUser;
+    window.toggleUserStatus = toggleUserStatus;
+    window.managePermissions = managePermissions;
+  </script>
+</body>
+</html>

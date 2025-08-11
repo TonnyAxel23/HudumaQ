@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Queue Status - HudumaQ</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --secondary: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --light: #f9fafb;
+      --dark: #1f2937;
+      --gray: #6b7280;
+      --light-gray: #e5e7eb;
+      --white: #ffffff;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+      --radius: 0.5rem;
+      --radius-sm: 0.25rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+      color: var(--dark);
+      background-color: #f5f7fa;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--white);
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 0;
+    }
+
+    .navbar .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo::before {
+      content: "📋";
+      font-size: 1.8rem;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      transition: color 0.2s;
+      padding: 0.5rem 0;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+
+    .nav-links a.active {
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .nav-links a.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--primary);
+      border-radius: 3px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .btn-outline {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background-color: transparent;
+    }
+
+    .btn-outline:hover {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+
+    /* Queue Section */
+    section {
+      padding: 4rem 0;
+    }
+
+    .card {
+      background-color: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .animate-fade {
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .queue-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .queue-header h2 {
+      font-size: 1.75rem;
+      color: var(--primary-dark);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+    }
+
+    .queue-header p {
+      color: var(--gray);
+      font-size: 1rem;
+    }
+
+    .queue-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+      background-color: var(--white);
+    }
+
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .queue-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background-color: var(--white);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--primary);
+      transition: all 0.3s ease;
+    }
+
+    .stat-card.user-in-queue {
+      border-left: 4px solid var(--secondary);
+      background-color: rgba(16, 185, 129, 0.05);
+    }
+
+    .stat-card i {
+      font-size: 1.75rem;
+      color: var(--primary);
+      background-color: rgba(79, 70, 229, 0.1);
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card.user-in-queue i {
+      color: var(--secondary);
+      background-color: rgba(16, 185, 129, 0.1);
+    }
+
+    .stat-card h3 {
+      font-size: 1.5rem;
+      color: var(--dark);
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-card p {
+      color: var(--gray);
+      font-size: 0.875rem;
+    }
+
+    /* Table */
+    .table-responsive {
+      overflow-x: auto;
+      margin-bottom: 1.5rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 1rem;
+    }
+
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    th {
+      background-color: var(--primary);
+      color: var(--white);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    tr:hover {
+      background-color: rgba(79, 70, 229, 0.05);
+    }
+
+    .status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 2rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .status-waiting {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .status-processing {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--secondary);
+    }
+
+    .status-completed {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    /* Message */
+    .message {
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 1rem;
+      text-align: center;
+      display: none;
+    }
+
+    .message.success {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--secondary);
+      display: block;
+    }
+
+    .message.error {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+      display: block;
+    }
+
+    /* Loading spinner */
+    .loading-spinner {
+      display: inline-block;
+      width: 2rem;
+      height: 2rem;
+      border: 3px solid rgba(79, 70, 229, 0.3);
+      border-radius: 50%;
+      border-top-color: var(--primary);
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--dark);
+      color: var(--light);
+      padding: 2rem 0;
+      text-align: center;
+    }
+
+    .footer .container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .footer p {
+      font-size: 0.875rem;
+    }
+
+    .heart {
+      color: #ef4444;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar .container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .nav-links {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .queue-controls {
+        grid-template-columns: 1fr;
+      }
+
+      .queue-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .nav-links {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+
+      .nav-links a.active::after {
+        display: none;
+      }
+
+      section {
+        padding: 2rem 0;
+      }
+
+      .card {
+        padding: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">HQ</span>
+        <span>HudumaQ</span>
+      </a>
+      <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="book.html"><i class="fas fa-calendar-plus"></i> Book</a></li>
+        <li><a href="queue.html" class="active"><i class="fas fa-users"></i> View Queue</a></li>
+        <li><a href="login.html" class="btn btn-outline"><i class="fas fa-lock"></i> Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Queue Section -->
+  <section class="container">
+    <div class="card animate-fade">
+      <div class="queue-header">
+        <h2><i class="fas fa-list-ol"></i> Live Queue Status</h2>
+        <p>Real-time updates on current queue positions and wait times</p>
+      </div>
+
+      <div class="queue-controls">
+        <div class="form-group">
+          <label for="filterService"><i class="fas fa-filter"></i> Filter by Service</label>
+          <select id="filterService">
+            <option value="">-- All Services --</option>
+            <option value="ID Replacement & Applications">ID Replacement & Applications</option>
+            <option value="Birth & Death Certificates">Birth & Death Certificates</option>
+            <option value="NHIF Services">NHIF Services</option>
+            <option value="NSSF Services">NSSF Services</option>
+            <option value="KRA Services">KRA Services</option>
+            <option value="Helb Services">Helb Services</option>
+            <option value="Police Abstracts">Police Abstracts</option>
+            <option value="E-Citizen Services">E-Citizen Services</option>
+            <option value="Good Conduct (Police Clearance)">Good Conduct (Police Clearance)</option>
+            <option value="Job Application : Support">Job Application : Support</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="filterLocation"><i class="fas fa-map-marker-alt"></i> Filter by Center</label>
+          <select id="filterLocation">
+            <option value="">-- All Centers --</option>
+            <option value="Nairobi GPO">Nairobi GPO</option>
+            <option value="Nairobi City Square">Nairobi City Square</option>
+            <option value="Nairobi Makadara">Nairobi Makadara</option>
+            <option value="Nairobi Eastleigh">Nairobi Eastleigh</option>
+            <option value="Nairobi Kibra">Nairobi Kibra</option>
+            <option value="Mombasa">Mombasa</option>
+            <option value="Kisumu">Kisumu</option>
+            <option value="Nakuru">Nakuru</option>
+            <option value="Eldoret">Eldoret</option>
+            <option value="Thika">Thika</option>
+            <option value="Meru">Meru</option>
+            <option value="Kakamega">Kakamega</option>
+            <option value="Machakos">Machakos</option>
+            <option value="Embu">Embu</option>
+            <option value="Nyeri">Nyeri</option>
+            <option value="Kisii">Kisii</option>
+            <option value="Kericho">Kericho</option>
+            <option value="Garissa">Garissa</option>
+            <option value="Kitui">Kitui</option>
+            <option value="Narok">Narok</option>
+            <option value="Bungoma">Bungoma</option>
+            <option value="Busia">Busia</option>
+            <option value="Vihiga">Vihiga</option>
+            <option value="Siaya">Siaya</option>
+            <option value="Bomet">Bomet</option>
+            <option value="Laikipia - Nanyuki">Laikipia - Nanyuki</option>
+            <option value="Homa Bay">Homa Bay</option>
+            <option value="Kajiado">Kajiado</option>
+            <option value="Kajiado West">Kajiado West</option>
+            <option value="Murang'a">Murang'a</option>
+            <option value="Kirinyaga - Kerugoya">Kirinyaga - Kerugoya</option>
+            <option value="Nyamira">Nyamira</option>
+            <option value="Nyandarua - Olkalau">Nyandarua - Olkalau</option>
+            <option value="Tharaka Nithi - Chuka">Tharaka Nithi - Chuka</option>
+            <option value="Kilifi">Kilifi</option>
+            <option value="Kwale">Kwale</option>
+            <option value="Taita Taveta - Wundanyi">Taita Taveta - Wundanyi</option>
+            <option value="Lamu">Lamu</option>
+            <option value="Isiolo">Isiolo</option>
+            <option value="Marsabit">Marsabit</option>
+            <option value="Mandera">Mandera</option>
+            <option value="Wajir">Wajir</option>
+            <option value="Tana River - Hola">Tana River - Hola</option>
+            <option value="Samburu - Maralal">Samburu - Maralal</option>
+            <option value="Turkana - Lodwar">Turkana - Lodwar</option>
+            <option value="Elgeyo Marakwet - Iten">Elgeyo Marakwet - Iten</option>
+            <option value="Nandi - Kapsabet">Nandi - Kapsabet</option>
+            <option value="Trans Nzoia - Kitale">Trans Nzoia - Kitale</option>
+            <option value="West Pokot - Kapenguria">West Pokot - Kapenguria</option>
+            <option value="Makueni - Wote">Makueni - Wote</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="queue-stats">
+        <div class="stat-card">
+          <i class="fas fa-users"></i>
+          <div>
+            <h3 id="totalInQueue">0</h3>
+            <p>People in Queue</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <i class="fas fa-clock"></i>
+          <div>
+            <h3 id="avgWaitTime">0 min</h3>
+            <p>Avg. Wait Time</p>
+          </div>
+        </div>
+        <div class="stat-card" id="positionCard">
+          <i class="fas fa-user-clock"></i>
+          <div>
+            <h3 id="yourPosition">-</h3>
+            <p id="positionContext">Your Position</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Queue No</th>
+              <th>Full Name</th>
+              <th>Service</th>
+              <th>Center</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="queueTableBody">
+            <!-- Data will be loaded dynamically -->
+            <tr id="loadingRow">
+              <td colspan="6" style="text-align: center;">
+                <div class="loading-spinner"></div>
+                <p>Loading queue data...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div id="queueMessage" class="message"></div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2025 HudumaQ. Built with <span class="heart">❤️</span> for Kenyans.</p>
+    </div>
+  </footer>
+    
+  <script>
+    // Global variable to store all queue data
+    let allQueueData = [];
+    let filteredQueueData = [];
+    let userQueueNumber = null;
+    let userService = null;
+    let userCenter = null;
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Check if user has a booking in localStorage
+      const storedBooking = getLocalStorageItem('userBooking');
+      if (storedBooking) {
+        userQueueNumber = storedBooking.queueNumber;
+        userService = storedBooking.service;
+        userCenter = storedBooking.center;
+        
+        // Show welcome message with user's queue number
+        showMessage(`Welcome! Your queue number is ${userQueueNumber} for ${userService} at ${userCenter}`, 'success');
+      }
+      
+      // Load queue data
+      loadQueueData();
+      
+      // Set up event listeners for filters
+      document.getElementById('filterService').addEventListener('change', filterQueue);
+      document.getElementById('filterLocation').addEventListener('change', filterQueue);
+      
+      // Set up interval to refresh data every 30 seconds
+      setInterval(loadQueueData, 30000);
+    });
+
+    // Helper function to safely get data from localStorage
+    function getLocalStorageItem(key) {
+      try {
+        const item = localStorage.getItem(key);
+        return item ? JSON.parse(item) : null;
+      } catch (e) {
+        console.error('Error reading from localStorage:', e);
+        return null;
+      }
+    }
+
+    // Helper function to safely set data in localStorage
+    function setLocalStorageItem(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+        return true;
+      } catch (e) {
+        console.error('Error writing to localStorage:', e);
+        return false;
+      }
+    }
+
+    // Function to validate booking data structure
+    function validateBookingData(booking) {
+      const requiredFields = ['queueNumber', 'fullName', 'service', 'center', 'time', 'status'];
+      return booking && requiredFields.every(field => booking.hasOwnProperty(field));
+    }
+
+    function loadQueueData() {
+      showLoading(true);
+      
+      // Get bookings from localStorage
+      const storedBookings = getLocalStorageItem('hudumaQBookings') || [];
+      const storedUserBooking = getLocalStorageItem('userBooking');
+      
+      // Combine stored bookings with mock data
+      allQueueData = [...storedBookings];
+      
+      // If we have a user booking that's not already in the list, add it
+      if (storedUserBooking && validateBookingData(storedUserBooking) && 
+          !allQueueData.some(b => b.queueNumber === storedUserBooking.queueNumber)) {
+        allQueueData.push(storedUserBooking);
+      }
+      
+      // Add mock data for demonstration (remove this in production)
+      allQueueData = allQueueData.concat(window.mockQueueData || []);
+      
+      // Filter out any invalid entries
+      allQueueData = allQueueData.filter(validateBookingData);
+      
+      // Sort by time to simulate real queue order
+      allQueueData.sort((a, b) => a.time.localeCompare(b.time));
+      
+      filteredQueueData = [...allQueueData];
+      
+      // Update the UI
+      updateQueueStats();
+      renderQueueTable();
+      showLoading(false);
+    }
+
+    // Function to filter the queue based on selected filters
+    function filterQueue() {
+      const serviceFilter = document.getElementById('filterService').value;
+      const locationFilter = document.getElementById('filterLocation').value;
+      
+      filteredQueueData = allQueueData.filter(item => {
+        const matchesService = serviceFilter === '' || item.service === serviceFilter;
+        const matchesLocation = locationFilter === '' || item.center === locationFilter;
+        return matchesService && matchesLocation;
+      });
+      
+      updateQueueStats();
+      renderQueueTable();
+    }
+
+    // Function to update the queue statistics
+    function updateQueueStats() {
+      // Update total in queue
+      const totalInQueue = filteredQueueData.length;
+      document.getElementById('totalInQueue').textContent = totalInQueue;
+      
+      // Calculate average wait time (assuming 5 minutes per person)
+      const avgWait = totalInQueue * 5;
+      document.getElementById('avgWaitTime').textContent = `${avgWait} min`;
+      
+      // Find user's position if they have a booking
+      let userPosition = '-';
+      let positionContext = 'Your Position';
+      const positionCard = document.getElementById('positionCard');
+      
+      if (userQueueNumber) {
+        // Find the user's booking in the filtered queue
+        const userBooking = filteredQueueData.find(item => item.queueNumber === userQueueNumber);
+        
+        if (userBooking) {
+          if (userBooking.status === 'Completed') {
+            // If completed, show position as 0
+            userPosition = '0';
+            positionContext = 'You have been served';
+            positionCard.classList.add('user-in-queue');
+          } else {
+            // Find the index of the user's booking in the filtered queue
+            const userIndex = filteredQueueData.findIndex(item => item.queueNumber === userQueueNumber);
+            // Add 1 because array indexes start at 0
+            userPosition = userIndex + 1;
+            positionContext = `of ${totalInQueue} in queue`;
+            positionCard.classList.add('user-in-queue');
+          }
+          
+          // Highlight the user's row in the table
+          highlightUserRow();
+        } else {
+          // If not found in filtered view, check the full queue
+          const fullQueueBooking = allQueueData.find(item => item.queueNumber === userQueueNumber);
+          if (fullQueueBooking) {
+            if (fullQueueBooking.status === 'Completed') {
+              userPosition = '0';
+              positionContext = 'You have been served (not in filtered view)';
+            } else {
+              const fullQueueIndex = allQueueData.findIndex(item => item.queueNumber === userQueueNumber);
+              userPosition = fullQueueIndex + 1;
+              positionContext = `of ${allQueueData.length} (not in filtered view)`;
+            }
+            positionCard.classList.add('user-in-queue');
+          } else {
+            positionCard.classList.remove('user-in-queue');
+          }
+        }
+      } else {
+        positionCard.classList.remove('user-in-queue');
+      }
+      
+      document.getElementById('yourPosition').textContent = userPosition;
+      document.getElementById('positionContext').textContent = positionContext;
+    }
+
+    // Function to highlight the user's row in the table
+    function highlightUserRow() {
+      const rows = document.querySelectorAll('#queueTableBody tr');
+      rows.forEach(row => {
+        // Remove any existing highlight
+        row.style.backgroundColor = '';
+        
+        // Check if this is the user's row
+        const queueNumberCell = row.querySelector('td:first-child');
+        if (queueNumberCell && queueNumberCell.textContent === userQueueNumber) {
+          row.style.backgroundColor = 'rgba(79, 70, 229, 0.1)';
+          row.style.fontWeight = '600';
+          row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      });
+    }
+
+    // Function to render the queue table
+    function renderQueueTable() {
+      const tableBody = document.getElementById('queueTableBody');
+      tableBody.innerHTML = '';
+      
+      if (filteredQueueData.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" style="text-align: center;">No queue data found matching your filters</td>
+          </tr>
+        `;
+        return;
+      }
+      
+      filteredQueueData.forEach(item => {
+        if (!validateBookingData(item)) {
+          console.warn('Invalid queue entry:', item);
+          return;
+        }
+        
+        const row = document.createElement('tr');
+        
+        let statusClass = 'status-waiting';
+        if (item.status === 'Processing') statusClass = 'status-processing';
+        if (item.status === 'Completed') statusClass = 'status-completed';
+        
+        row.innerHTML = `
+          <td>${item.queueNumber || '-'}</td>
+          <td>${item.fullName || '-'}</td>
+          <td>${item.service || '-'}</td>
+          <td>${item.center || '-'}</td>
+          <td>${item.time ? formatTimeForQueue(item.time) : '-'}</td>
+          <td><span class="status ${statusClass}">${item.status || 'Waiting'}</span></td>
+        `;
+        
+        tableBody.appendChild(row);
+      });
+
+      if (userQueueNumber) {
+        highlightUserRow();
+      }
+    }
+
+    // Helper function to format time for queue display
+    function formatTimeForQueue(timeString) {
+      if (!timeString) return '-';
+      
+      // Handle both "HH:MM" and "HH:MM AM/PM" formats
+      if (timeString.includes(':')) {
+        const timeParts = timeString.split(' ');
+        let [hours, minutes] = timeParts[0].split(':');
+        
+        // If we don't have AM/PM, add it
+        if (timeParts.length === 1) {
+          const period = hours >= 12 ? 'PM' : 'AM';
+          const displayHours = hours % 12 || 12;
+          return `${displayHours}:${minutes} ${period}`;
+        }
+      }
+      return timeString;
+    }
+
+    // Function to show/hide loading state
+    function showLoading(show) {
+      const loadingRow = document.getElementById('loadingRow');
+      if (loadingRow) {
+        loadingRow.style.display = show ? 'table-row' : 'none';
+      }
+    }
+
+    // Function to show messages
+    function showMessage(message, type) {
+      const messageDiv = document.getElementById('queueMessage');
+      messageDiv.textContent = message;
+      messageDiv.className = `message ${type}`;
+      
+      setTimeout(() => {
+        messageDiv.className = 'message';
+        messageDiv.textContent = '';
+      }, 5000);
+    }
+
+    // Mock data for demonstration
+    window.mockQueueData = [
+      {
+        queueNumber: "HQ-1254",
+        fullName: "John Mwangi",
+        service: "ID Replacement & Applications",
+        center: "Nairobi GPO",
+        time: "09:15 AM",
+        status: "Processing"
+      },
+      {
+        queueNumber: "HQ-1253",
+        fullName: "Sarah Wambui",
+        service: "Birth & Death Certificates",
+        center: "Nairobi GPO",
+        time: "09:00 AM",
+        status: "Completed"
+      },
+      {
+        queueNumber: "HQ-1255",
+        fullName: "David Omondi",
+        service: "Good Conduct (Police Clearance)",
+        center: "Nairobi City Square",
+        time: "09:30 AM",
+        status: "Waiting"
+      },
+      {
+        queueNumber: "HQ-1256",
+        fullName: "Grace Akinyi",
+        service: "NHIF Services",
+        center: "Nairobi Makadara",
+        time: "09:45 AM",
+        status: "Waiting"
+      }
+    ];
+
+    // Mock fetch function for demonstration
+    window.fetch = async function(url) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          if (url === 'api/queue') {
+            resolve({
+              ok: true,
+              json: () => Promise.resolve(window.mockQueueData)
+            });
+          }
+        }, 1000);
+      });
+    };
+</script>
+</body>
+</html>

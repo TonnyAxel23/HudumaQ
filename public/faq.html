@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQs | HudumaQ</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- 🔵 Navbar -->
+  <nav class="navbar">
+    <div class="container">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">HQ</span>
+        <span>HudumaQ</span>
+      </a>
+      <div class="nav-toggle" id="navToggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="book.html"><i class="fas fa-calendar-check"></i> Book Appointment</a></li>
+        <li><a href="queue.html"><i class="fas fa-users"></i> View Queue</a></li>
+        <li><a href="login.html" class="btn btn-outline"><i class="fas fa-lock"></i> Admin Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- 🟢 FAQ Hero -->
+  <header class="page-hero">
+    <div class="container">
+      <h1>Frequently Asked Questions</h1>
+      <p>Find quick answers to common questions about HudumaQ services.</p>
+    </div>
+  </header>
+
+  <!-- 🟡 FAQ Search -->
+  <section class="faq-search">
+    <div class="container">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" id="faqSearch" placeholder="Search FAQs...">
+      </div>
+    </div>
+  </section>
+
+  <!-- 🔵 FAQ Categories -->
+  <section class="faq-categories">
+    <div class="container">
+      <div class="category-tabs">
+        <button class="category-btn active" data-category="all">All Questions</button>
+        <button class="category-btn" data-category="booking">Booking</button>
+        <button class="category-btn" data-category="queue">Queue</button>
+        <button class="category-btn" data-category="technical">Technical</button>
+        <button class="category-btn" data-category="account">Account</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 🟢 FAQ Main Content -->
+  <section class="faq-main">
+    <div class="container">
+      <div class="faq-container">
+        <!-- Booking Section -->
+        <div class="faq-section" id="booking">
+          <h2 class="faq-section-title">Booking Questions</h2>
+          
+          <div class="faq-item" data-category="booking">
+            <div class="faq-question">
+              <h3>How do I book an appointment?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>To book an appointment:</p>
+              <ol>
+                <li>Go to the Book Appointment page</li>
+                <li>Select the service you need</li>
+                <li>Choose your preferred Huduma Centre location</li>
+                <li>Select an available date and time slot</li>
+                <li>Confirm your booking details</li>
+                <li>You'll receive a confirmation SMS and email</li>
+              </ol>
+            </div>
+          </div>
+          
+          <div class="faq-item" data-category="booking">
+            <div class="faq-question">
+              <h3>Can I reschedule my appointment?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Yes, you can reschedule your appointment up to 24 hours before your scheduled time:</p>
+              <ul>
+                <li>Log in to your HudumaQ account</li>
+                <li>Go to "My Appointments"</li>
+                <li>Select the appointment you want to reschedule</li>
+                <li>Choose "Reschedule" and select a new time slot</li>
+                <li>You'll receive a new confirmation</li>
+              </ul>
+              <p>Note: Late rescheduling may be subject to penalties.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" data-category="booking">
+            <div class="faq-question">
+              <h3>What services can I book through HudumaQ?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>HudumaQ currently supports booking for these services:</p>
+              <div class="service-grid">
+                <div class="service-item">
+                  <i class="fas fa-id-card"></i>
+                  <span>National ID Services</span>
+                </div>
+                <div class="service-item">
+                  <i class="fas fa-passport"></i>
+                  <span>Passport Applications</span>
+                </div>
+                <div class="service-item">
+                  <i class="fas fa-car"></i>
+                  <span>Driving License</span>
+                </div>
+                <div class="service-item">
+                  <i class="fas fa-building"></i>
+                  <span>Business Registration</span>
+                </div>
+                <div class="service-item">
+                  <i class="fas fa-certificate"></i>
+                  <span>Certificate Services</span>
+                </div>
+                <div class="service-item">
+                  <i class="fas fa-file-alt"></i>
+                  <span>Document Legalization</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Queue Section -->
+        <div class="faq-section" id="queue">
+          <h2 class="faq-section-title">Queue Questions</h2>
+          
+          <div class="faq-item" data-category="queue">
+            <div class="faq-question">
+              <h3>How do I check my queue status?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>You can check your queue status in three ways:</p>
+              <ol>
+                <li><strong>Online:</strong> Log in to your HudumaQ account and go to "My Queue"</li>
+                <li><strong>SMS:</strong> Send "QUEUE [Your Booking ID]" to 20888</li>
+                <li><strong>Mobile App:</strong> Check the real-time queue updates in the HudumaQ app</li>
+              </ol>
+              <p>You'll receive notifications when your turn is approaching.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" data-category="queue">
+            <div class="faq-question">
+              <h3>What happens if I miss my turn in the queue?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>If you miss your turn:</p>
+              <ul>
+                <li>You'll be placed at the end of the current queue</li>
+                <li>You may need to wait for the next available slot</li>
+                <li>For critical services, you might need to reschedule</li>
+              </ul>
+              <p>We recommend arriving at least 15 minutes before your estimated service time.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Technical Section -->
+        <div class="faq-section" id="technical">
+          <h2 class="faq-section-title">Technical Questions</h2>
+          
+          <div class="faq-item" data-category="technical">
+            <div class="faq-question">
+              <h3>Is there a mobile app available?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>Yes! HudumaQ is available on both Android and iOS:</p>
+              <div class="app-downloads">
+                <a href="#" class="app-btn">
+                  <i class="fab fa-google-play"></i>
+                  <div>
+                    <span>Get it on</span>
+                    <strong>Google Play</strong>
+                  </div>
+                </a>
+                <a href="#" class="app-btn">
+                  <i class="fab fa-apple"></i>
+                  <div>
+                    <span>Download on the</span>
+                    <strong>App Store</strong>
+                  </div>
+                </a>
+              </div>
+              <p>The app offers all website features plus push notifications for queue updates.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" data-category="technical">
+            <div class="faq-question">
+              <h3>What should I do if I don't receive my confirmation SMS?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>If you don't receive your confirmation:</p>
+              <ol>
+                <li>Check your email (including spam folder)</li>
+                <li>Log in to your HudumaQ account to verify the booking</li>
+                <li>Wait 10-15 minutes as delays can sometimes occur</li>
+                <li>If still not received, contact our support team with your booking details</li>
+              </ol>
+              <p>You can also try resending the confirmation from your account dashboard.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Account Section -->
+        <div class="faq-section" id="account">
+          <h2 class="faq-section-title">Account Questions</h2>
+          
+          <div class="faq-item" data-category="account">
+            <div class="faq-question">
+              <h3>How do I reset my password?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>To reset your password:</p>
+              <ol>
+                <li>Go to the login page</li>
+                <li>Click "Forgot Password"</li>
+                <li>Enter the email associated with your account</li>
+                <li>Check your email for a password reset link</li>
+                <li>Click the link and create a new password</li>
+              </ol>
+              <p>If you don't receive the email within 10 minutes, please check your spam folder.</p>
+            </div>
+          </div>
+          
+          <div class="faq-item" data-category="account">
+            <div class="faq-question">
+              <h3>Can I use HudumaQ without creating an account?</h3>
+              <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+              <p>For most services, you need an account to:</p>
+              <ul>
+                <li>Book appointments</li>
+                <li>View your queue status</li>
+                <li>Access your service history</li>
+                <li>Receive notifications</li>
+              </ul>
+              <p>However, you can check general queue times at each Huduma Centre without logging in.</p>
+              <p>Account creation is free and only takes 2 minutes with your ID number and phone number.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Still Need Help? -->
+      <div class="faq-help">
+        <div class="help-card">
+          <i class="fas fa-headset"></i>
+          <h3>Still need help?</h3>
+          <p>Can't find the answer you're looking for? Our support team is ready to assist you.</p>
+          <a href="contact.html" class="btn btn-primary">
+            <i class="fas fa-envelope"></i> Contact Support
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ⚫ Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <div class="logo">
+            <span class="logo-icon">HQ</span>
+            <span>HudumaQ</span>
+          </div>
+          <p>Building a smarter, more efficient Kenya through innovative technology solutions.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="book.html">Book Appointment</a></li>
+            <li><a href="queue.html">Check Queue</a></li>
+            <li><a href="faq.html">FAQs</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Services</h4>
+          <ul>
+            <li><a href="#">ID Services</a></li>
+            <li><a href="#">Passport</a></li>
+            <li><a href="#">Driving License</a></li>
+            <li><a href="#">Business Registration</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul class="contact-info">
+            <li><i class="fas fa-map-marker-alt"></i> Nairobi, Kenya</li>
+            <li><i class="fas fa-phone"></i> +254 700 123456</li>
+            <li><i class="fas fa-envelope"></i> support@hudumaq.go.ke</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 HudumaQ. All rights reserved. Built with <span class="heart">♥</span> for Kenyans.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile navigation toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      navToggle.classList.toggle('active');
+    });
+
+    // FAQ Accordion
+    const faqQuestions = document.querySelectorAll('.faq-question');
+    faqQuestions.forEach(question => {
+      question.addEventListener('click', () => {
+        const answer = question.nextElementSibling;
+        const icon = question.querySelector('i');
+        
+        // Toggle this question
+        question.parentElement.classList.toggle('active');
+        
+        // Rotate icon
+        if (question.parentElement.classList.contains('active')) {
+          icon.classList.remove('fa-chevron-down');
+          icon.classList.add('fa-chevron-up');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        } else {
+          icon.classList.remove('fa-chevron-up');
+          icon.classList.add('fa-chevron-down');
+          answer.style.maxHeight = '0';
+        }
+      });
+    });
+
+    // FAQ Search
+    const faqSearch = document.getElementById('faqSearch');
+    faqSearch.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('h3').textContent.toLowerCase();
+        const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+        
+        if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    });
+
+    // FAQ Category Filter
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    categoryBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Update active button
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        const category = btn.dataset.category;
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        if (category === 'all') {
+          faqItems.forEach(item => {
+            item.style.display = 'block';
+          });
+        } else {
+          faqItems.forEach(item => {
+            if (item.dataset.category === category) {
+              item.style.display = 'block';
+            } else {
+              item.style.display = 'none';
+            }
+          });
+        }
+      });
+    });
+  </script>
+
+  <style>
+    /* FAQ Page Specific Styles */
+    .faq-search {
+      padding: 2rem 0;
+      background-color: white;
+      position: sticky;
+      top: 5rem;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .search-box {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 1rem 1rem 1rem 3rem;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--rounded);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .search-box input:focus {
+      border-color: var(--primary);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .faq-categories {
+      padding: 1rem 0;
+      background-color: white;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    .category-tabs {
+      display: flex;
+      gap: 0.5rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+
+    .category-btn {
+      padding: 0.75rem 1.5rem;
+      background-color: #f1f5f9;
+      border: none;
+      border-radius: 2rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition);
+    }
+
+    .category-btn:hover {
+      background-color: #e2e8f0;
+    }
+
+    .category-btn.active {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .faq-main {
+      padding: 3rem 0 5rem;
+    }
+
+    .faq-section {
+      margin-bottom: 3rem;
+    }
+
+    .faq-section-title {
+      font-size: 1.75rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--light-gray);
+      color: var(--dark);
+    }
+
+    .faq-item {
+      margin-bottom: 1rem;
+      border: 1px solid var(--light-gray);
+      border-radius: var(--rounded);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+
+    .faq-item.active {
+      border-color: var(--primary);
+    }
+
+    .faq-question {
+      padding: 1.5rem;
+      background-color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-question h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--dark);
+    }
+
+    .faq-question i {
+      transition: var(--transition);
+    }
+
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background-color: #f8fafc;
+    }
+
+    .faq-item.active .faq-answer {
+      max-height: 1000px; /* Adjust based on content */
+    }
+
+    .faq-answer p,
+    .faq-answer ol,
+    .faq-answer ul {
+      padding: 0 1.5rem 1.5rem;
+      color: var(--gray);
+    }
+
+    .faq-answer ol,
+    .faq-answer ul {
+      padding-left: 2.5rem;
+      margin: 1rem 0;
+    }
+
+    .faq-answer li {
+      margin-bottom: 0.5rem;
+    }
+
+    .service-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin: 1rem 0;
+    }
+
+    .service-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 1rem;
+      background-color: white;
+      border-radius: var(--rounded);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .service-item i {
+      font-size: 1.5rem;
+      color: var(--primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .app-downloads {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .app-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--dark);
+      color: white;
+      border-radius: var(--rounded);
+    }
+
+    .app-btn i {
+      font-size: 1.5rem;
+    }
+
+    .app-btn div {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .app-btn span {
+      font-size: 0.7rem;
+    }
+
+    .app-btn strong {
+      font-size: 1rem;
+    }
+
+    .faq-help {
+      margin-top: 4rem;
+    }
+
+    .help-card {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 3rem;
+      background-color: white;
+      border-radius: var(--rounded-lg);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .help-card i {
+      font-size: 3rem;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .help-card h3 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .help-card p {
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .faq-question {
+        padding: 1rem;
+      }
+      
+      .faq-answer p,
+      .faq-answer ol,
+      .faq-answer ul {
+        padding: 0 1rem 1rem;
+      }
+      
+      .app-downloads {
+        flex-direction: column;
+      }
+      
+      .help-card {
+        padding: 2rem 1.5rem;
+      }
+    }
+  </style>
+</body>
+</html>

@@ -1,0 +1,2368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointments - HudumaQ Admin</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<style>
+  /* Base Styles & Variables */
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #e6e9ff;
+  --secondary-color: #3f37c9;
+  --success-color: #4cc9f0;
+  --warning-color: #f8961e;
+  --danger-color: #f94144;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fb;
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-nav li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.sidebar-nav li a i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav li a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.sidebar-nav li.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  color: var(--danger-color);
+}
+
+.logout-btn i {
+  margin-right: 10px;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-color);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.notification-bell {
+  position: relative;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.notification-bell i {
+  font-size: 1.2rem;
+  color: var(--gray-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-dropdown img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-dropdown span {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+  margin-top: 10px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: var(--dark-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.dropdown-menu a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--light-gray);
+  margin: 0.5rem 0;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.page-header p {
+  color: var(--gray-color);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  display: flex;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-danger {
+  background-color: var(--danger-color);
+}
+
+.stat-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.stat-info p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.stat-change {
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.stat-change i {
+  margin-right: 4px;
+  font-size: 0.7rem;
+}
+
+.positive {
+  color: #2ecc71;
+}
+
+.negative {
+  color: var(--danger-color);
+}
+
+.neutral {
+  color: var(--gray-color);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.action-btn i {
+  margin-right: 8px;
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Data Card */
+.data-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card-header h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
+
+.card-header h2 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: var(--gray-color);
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label i {
+  margin-right: 5px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  min-width: 150px;
+}
+
+.filter-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  align-self: flex-end;
+}
+
+.filter-btn:hover {
+  background: var(--secondary-color);
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  padding: 0 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--gray-color);
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table th i {
+  margin-left: 5px;
+  color: var(--light-gray);
+  cursor: pointer;
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.waiting {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.in-progress {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.cancelled {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.action-icon {
+  background: none;
+  border: none;
+  color: var(--gray-color);
+  cursor: pointer;
+  margin-right: 10px;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.action-icon:hover {
+  color: var(--primary-color);
+}
+
+/* Card Footer */
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-info {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.table-info span {
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--light-gray);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.pagination-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Widgets Grid */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.widget {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.widget-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widget-header h3 {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.widget-header h3 i {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.widget-filter {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+}
+
+.widget-content {
+  padding: 1.5rem;
+}
+
+.pie-chart-placeholder,
+.line-chart-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-color);
+  border-radius: var(--border-radius);
+}
+
+.alert-item {
+  display: flex;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.critical {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alert-details p {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-time {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+  padding: 1rem 1.5rem;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--gray-color);
+}
+
+.footer-links a {
+  margin-left: 1rem;
+  color: var(--gray-color);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.modal-header h3 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-color);
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.btn-primary:hover {
+  background: var(--secondary-color);
+}
+
+.btn-secondary {
+  background: white;
+  color: var(--dark-color);
+  border: 1px solid var(--light-gray);
+}
+
+.btn-secondary:hover {
+  background: var(--light-gray);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  
+  .sidebar-header .logo span,
+  .sidebar-nav li a span,
+  .logout-btn span {
+    display: none;
+  }
+  
+  .sidebar-nav li a {
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .sidebar-nav li a i {
+    margin-right: 0;
+    font-size: 1.3rem;
+  }
+  
+  .sidebar-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  width: 100%;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+  }
+  
+  .filter-btn {
+    width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination {
+    margin-top: 1rem;
+  }
+  
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .user-profile {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .modal-content {
+    width: 95%;
+  }
+}
+</style>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo">
+          <i class="fas fa-handshake"></i> HudumaQ
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li>
+            <a href="admin.html">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li class="active">
+            <a href="appointments.html">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Appointments</span>
+            </a>
+          </li>
+          <li>
+            <a href="service_centers.html">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Service Centers</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html">
+              <i class="fas fa-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="users.html">
+              <i class="fas fa-users"></i>
+              <span>Users</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="login.html" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search appointments...">
+        </div>
+        
+        <div class="user-profile">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count">0</span>
+          </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <img src="https://via.placeholder.com/40" alt="Admin Profile">
+            <span>Admin User</span>
+            <i class="fas fa-chevron-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="#">
+                <i class="fas fa-user"></i> My Profile
+              </a>
+              <a href="settings.html">
+                <i class="fas fa-cog"></i> Settings
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="login.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <section class="dashboard-content">
+        <div class="page-header">
+          <h1><i class="fas fa-calendar-alt"></i> Appointments Management</h1>
+          <p>View and manage all scheduled appointments across service centers</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary">
+              <i class="fas fa-calendar-day"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="todayAppointments">0</h3>
+              <p>Today's Appointments</p>
+              <span class="stat-change" id="todayChange"></span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-success">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="completedAppointments">0</h3>
+              <p>Completed Today</p>
+              <span class="stat-change" id="completedChange"></span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-warning">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="pendingAppointments">0</h3>
+              <p>Pending Approval</p>
+              <span class="stat-change" id="pendingChange"></span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-danger">
+              <i class="fas fa-times-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="cancelledAppointments">0</h3>
+              <p>Cancelled Today</p>
+              <span class="stat-change" id="cancelledChange"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="action-btn" id="addAppointmentBtn">
+            <i class="fas fa-plus"></i> Add Appointment
+          </button>
+          <button class="action-btn">
+            <i class="fas fa-file-import"></i> Bulk Import
+          </button>
+          <button class="action-btn" id="exportAppointments">
+            <i class="fas fa-file-export"></i> Export Data
+          </button>
+          <button class="action-btn" id="refreshData">
+            <i class="fas fa-sync-alt"></i> Refresh Data
+          </button>
+        </div>
+
+        <!-- Main Data Card -->
+        <div class="data-card">
+          <div class="card-header">
+            <h2><i class="fas fa-list"></i> All Appointments</h2>
+            
+            <div class="filter-controls">
+              <div class="filter-group">
+                <label for="appointmentDateFilter"><i class="fas fa-calendar-day"></i> Date Range</label>
+                <input type="text" id="appointmentDateFilter" class="date-picker" placeholder="Select date range">
+              </div>
+              
+              <div class="filter-group">
+                <label for="appointmentServiceFilter"><i class="fas fa-filter"></i> Service</label>
+                <select id="appointmentServiceFilter">
+                  <option value="">All Services</option>
+                  <option value="ID Replacement & Applications">ID Replacement & Applications</option>
+                  <option value="Birth & Death Certificates">Birth & Death Certificates</option>
+                  <option value="NHIF Services">NHIF Services</option>
+                  <option value="NSSF Services">NSSF Services</option>
+                  <option value="KRA Services">KRA Services</option>
+                  <option value="Police Clearance">Police Clearance</option>
+                  <option value="Passport Services">Passport Services</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="appointmentCenterFilter"><i class="fas fa-map-marker-alt"></i> Center</label>
+                <select id="appointmentCenterFilter">
+                  <option value="">All Centers</option>
+                  <option value="Nairobi GPO">Nairobi GPO</option>
+                  <option value="Mombasa">Mombasa</option>
+                  <option value="Kisumu">Kisumu</option>
+                  <option value="Nakuru">Nakuru</option>
+                  <option value="Eldoret">Eldoret</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="appointmentStatusFilter"><i class="fas fa-info-circle"></i> Status</label>
+                <select id="appointmentStatusFilter">
+                  <option value="">All Statuses</option>
+                  <option value="Pending">Pending</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                  <option value="No Show">No Show</option>
+                </select>
+              </div>
+              
+              <button class="filter-btn" id="applyFilters">
+                <i class="fas fa-filter"></i> Apply Filters
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table" id="appointmentsTable">
+              <thead>
+                <tr>
+                  <th>Ref No <i class="fas fa-sort"></i></th>
+                  <th>Client Name <i class="fas fa-sort"></i></th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Service <i class="fas fa-sort"></i></th>
+                  <th>Center <i class="fas fa-sort"></i></th>
+                  <th>Date & Time <i class="fas fa-sort"></i></th>
+                  <th>Queue Number</th>
+                  <th>Queue Time</th>
+                  <th>Status</th>
+                  <th>Queue Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="appointmentsTableBody">
+                <!-- Data will be populated by JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-footer">
+            <div class="table-info">
+              Showing <span id="showingFrom">0</span>-<span id="showingTo">0</span> of <span id="totalEntries">0</span> entries
+            </div>
+            
+            <div class="pagination">
+              <button class="pagination-btn" id="prevPage" disabled>
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn" id="nextPage">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Widgets -->
+        <div class="widgets-grid">
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-pie"></i> Appointment Status Distribution</h3>
+              <select class="widget-filter" id="statusDistributionFilter">
+                <option>Today</option>
+                <option>This Week</option>
+                <option>This Month</option>
+              </select>
+            </div>
+            <div class="widget-content">
+              <div class="pie-chart-placeholder">
+                <canvas id="statusChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-line"></i> Daily Appointments Trend</h3>
+              <select class="widget-filter" id="trendFilter">
+                <option>Last 7 Days</option>
+                <option>Last 30 Days</option>
+                <option>Last 90 Days</option>
+              </select>
+            </div>
+            <div class="widget-content">
+              <div class="line-chart-placeholder">
+                <canvas id="trendChart"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-exclamation-circle"></i> Recent Appointment Alerts</h3>
+            </div>
+            <div class="widget-content" id="alertsContainer">
+              <!-- Alerts will be populated by JavaScript -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <p>&copy; 2025 HudumaQ. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Help Center</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add Appointment Modal -->
+  <div class="modal" id="addAppointmentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus-circle"></i> Add New Appointment</h3>
+        <button class="close-btn" id="closeModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="appointmentForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="clientName">Client Name</label>
+              <input type="text" id="clientName" class="form-control" required>
+            </div>
+            <div class="form-group">
+              <label for="clientPhone">Phone Number</label>
+              <input type="tel" id="clientPhone" class="form-control" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="clientEmail">Email Address</label>
+            <input type="email" id="clientEmail" class="form-control">
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="appointmentService">Service</label>
+              <select id="appointmentService" class="form-control" required>
+                <option value="">Select Service</option>
+                <option value="ID Replacement & Applications">ID Replacement & Applications</option>
+                <option value="Birth & Death Certificates">Birth & Death Certificates</option>
+                <option value="NHIF Services">NHIF Services</option>
+                <option value="NSSF Services">NSSF Services</option>
+                <option value="KRA Services">KRA Services</option>
+                <option value="Police Clearance">Police Clearance</option>
+                <option value="Passport Services">Passport Services</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="appointmentCenter">Service Center</label>
+              <select id="appointmentCenter" class="form-control" required>
+                <option value="">Select Center</option>
+                <option value="Nairobi GPO">Nairobi GPO</option>
+                <option value="Mombasa">Mombasa</option>
+                <option value="Kisumu">Kisumu</option>
+                <option value="Nakuru">Nakuru</option>
+                <option value="Eldoret">Eldoret</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="appointmentDate">Date</label>
+              <input type="text" id="appointmentDate" class="form-control date-picker" required>
+            </div>
+            <div class="form-group">
+              <label for="appointmentTime">Time</label>
+              <input type="text" id="appointmentTime" class="form-control time-picker" required>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="appointmentNotes">Notes</label>
+            <textarea id="appointmentNotes" class="form-control" rows="3"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="cancelAppointment">Cancel</button>
+        <button class="btn btn-primary" id="saveAppointment">Save Appointment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View/Edit Appointment Modal -->
+  <div class="modal" id="viewAppointmentModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-calendar-alt"></i> Appointment Details</h3>
+        <button class="close-btn" id="closeViewModal">&times;</button>
+      </div>
+      <div class="modal-body" id="appointmentDetails">
+        <!-- Details will be populated by JavaScript -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="closeDetails">Close</button>
+        <button class="btn btn-primary" id="editAppointment">Edit</button>
+      </div>
+    </div>
+  </div>
+
+   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    // Global variables
+    let appointments = [];
+    let queueData = [];
+    let currentPage = 1;
+    const itemsPerPage = 7;
+    let filteredAppointments = [];
+    let statusChart, trendChart;
+
+    // DOM Elements
+    const appointmentsTableBody = document.getElementById('appointmentsTableBody');
+    const todayAppointmentsEl = document.getElementById('todayAppointments');
+    const completedAppointmentsEl = document.getElementById('completedAppointments');
+    const pendingAppointmentsEl = document.getElementById('pendingAppointments');
+    const cancelledAppointmentsEl = document.getElementById('cancelledAppointments');
+    const showingFromEl = document.getElementById('showingFrom');
+    const showingToEl = document.getElementById('showingTo');
+    const totalEntriesEl = document.getElementById('totalEntries');
+    const prevPageBtn = document.getElementById('prevPage');
+    const nextPageBtn = document.getElementById('nextPage');
+    const refreshDataBtn = document.getElementById('refreshData');
+    const applyFiltersBtn = document.getElementById('applyFilters');
+    const addAppointmentBtn = document.getElementById('addAppointmentBtn');
+    const saveAppointmentBtn = document.getElementById('saveAppointment');
+    const exportAppointmentsBtn = document.getElementById('exportAppointments');
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize date pickers
+      flatpickr(".date-picker", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        defaultDate: [new Date(), new Date(new Date().setDate(new Date().getDate() + 7))]
+      });
+
+      flatpickr("#appointmentDate", {
+        dateFormat: "Y-m-d",
+        minDate: "today"
+      });
+
+      flatpickr("#appointmentTime", {
+        enableTime: true,
+        noCalendar: true,
+        dateFormat: "H:i",
+        time_24hr: true
+      });
+
+      // Load data
+      fetchAppointments();
+      fetchQueueData();
+
+      // Set up event listeners
+      setupEventListeners();
+
+      // Initialize charts
+      initializeCharts();
+
+      // Listen for storage changes
+      window.addEventListener('storage', function(e) {
+        if (e.key === 'hudumaQAppointments' || e.key === 'hudumaQBookings') {
+          fetchAppointments();
+          fetchQueueData();
+        }
+      });
+    });
+
+    async function fetchAppointments() {
+      try {
+        // Get appointments from localStorage
+        const localAppointments = JSON.parse(localStorage.getItem('hudumaQAppointments')) || [];
+        
+        // Get queue data from localStorage
+        const localQueueData = JSON.parse(localStorage.getItem('hudumaQBookings')) || [];
+        
+        // Merge the data - now including queueTime
+        appointments = localAppointments.map(app => {
+          const queueEntry = localQueueData.find(q => q.queueNumber === app.queueNumber);
+          return {
+            ...app,
+            queueStatus: queueEntry ? queueEntry.status : 'Unknown',
+            queueTime: queueEntry ? queueEntry.time : '',
+            email: app.email || 'Not provided' // Ensure email field exists
+          };
+        });
+        
+        filteredAppointments = [...appointments];
+        updateStats();
+        renderTable();
+        updateCharts();
+        updateAlerts();
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+        appointments = [];
+        filteredAppointments = [];
+        updateStats();
+        renderTable();
+        updateCharts();
+        updateAlerts();
+      }
+    }
+
+    async function fetchQueueData() {
+      try {
+        // Get queue data from localStorage
+        queueData = JSON.parse(localStorage.getItem('hudumaQBookings')) || [];
+      } catch (error) {
+        console.error('Error fetching queue data:', error);
+        queueData = [];
+      }
+    }
+
+    // Update statistics cards
+    function updateStats() {
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Today's appointments
+      const todayApps = appointments.filter(app => {
+        const appDate = new Date(app.dateTime).toISOString().split('T')[0];
+        return appDate === today;
+      });
+      todayAppointmentsEl.textContent = todayApps.length;
+      
+      // Calculate change from yesterday
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayStr = yesterday.toISOString().split('T')[0];
+      const yesterdayApps = appointments.filter(app => {
+        const appDate = new Date(app.dateTime).toISOString().split('T')[0];
+        return appDate === yesterdayStr;
+      });
+      
+      const todayChange = todayApps.length - yesterdayApps.length;
+      updateChangeIndicator('todayChange', todayChange);
+      
+      // Completed today
+      const completedToday = todayApps.filter(app => app.status === 'Completed').length;
+      completedAppointmentsEl.textContent = completedToday;
+      
+      // Completed change
+      const completedYesterday = yesterdayApps.filter(app => app.status === 'Completed').length;
+      const completedChange = completedToday - completedYesterday;
+      updateChangeIndicator('completedChange', completedChange);
+      
+      // Pending approval
+      const pendingTotal = appointments.filter(app => app.status === 'Pending').length;
+      pendingAppointmentsEl.textContent = pendingTotal;
+      
+      // Pending change (week over week)
+      const lastWeek = new Date();
+      lastWeek.setDate(lastWeek.getDate() - 7);
+      const lastWeekStr = lastWeek.toISOString().split('T')[0];
+      const lastWeekPending = appointments.filter(app => 
+        app.status === 'Pending' && new Date(app.dateTime).toISOString().split('T')[0] >= lastWeekStr
+      ).length;
+      
+      const pendingChange = pendingTotal - lastWeekPending;
+      updateChangeIndicator('pendingChange', pendingChange);
+      
+      // Cancelled today
+      const cancelledToday = todayApps.filter(app => app.status === 'Cancelled').length;
+      cancelledAppointmentsEl.textContent = cancelledToday;
+      
+      // Cancelled change
+      const cancelledYesterday = yesterdayApps.filter(app => app.status === 'Cancelled').length;
+      const cancelledChange = cancelledToday - cancelledYesterday;
+      updateChangeIndicator('cancelledChange', cancelledChange);
+    }
+
+    function updateChangeIndicator(elementId, change) {
+      const element = document.getElementById(elementId);
+      element.innerHTML = '';
+      
+      if (change > 0) {
+        element.className = 'stat-change positive';
+        element.innerHTML = `<i class="fas fa-caret-up"></i> ${Math.abs(change)}`;
+      } else if (change < 0) {
+        element.className = 'stat-change negative';
+        element.innerHTML = `<i class="fas fa-caret-down"></i> ${Math.abs(change)}`;
+      } else {
+        element.className = 'stat-change neutral';
+        element.innerHTML = `<i class="fas fa-equals"></i> 0`;
+      }
+    }
+
+    // Render the appointments table with queue info
+    function renderTable() {
+      // Sort appointments by date/time in descending order (newest first)
+      filteredAppointments.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime));
+      
+      const startIdx = (currentPage - 1) * itemsPerPage;
+      const endIdx = startIdx + itemsPerPage;
+      const paginatedData = filteredAppointments.slice(startIdx, endIdx);
+      
+      appointmentsTableBody.innerHTML = '';
+      
+      if (paginatedData.length === 0) {
+        appointmentsTableBody.innerHTML = `
+          <tr>
+            <td colspan="12" style="text-align: center;">No appointments found</td>
+          </tr>
+        `;
+        return;
+      }
+      
+      paginatedData.forEach(appointment => {
+        const row = document.createElement('tr');
+        
+        // Format date and time for display
+        const dateTime = new Date(appointment.dateTime);
+        const formattedDate = dateTime.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric'
+        });
+        const formattedTime = dateTime.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+        // Determine status badge class
+        let statusClass = 'waiting';
+        if (appointment.status === 'Confirmed') statusClass = 'in-progress';
+        if (appointment.status === 'Completed') statusClass = 'completed';
+        if (appointment.status === 'Cancelled' || appointment.status === 'No Show') statusClass = 'cancelled';
+        
+        // Queue status badge
+        let queueStatusClass = 'waiting';
+        if (appointment.queueStatus === 'Processing') queueStatusClass = 'in-progress';
+        if (appointment.queueStatus === 'Completed') queueStatusClass = 'completed';
+        
+        // Action buttons based on queue status
+        let actionButtons = '';
+        if (appointment.queueStatus === 'Waiting') {
+          actionButtons = `
+            <button class="action-icon process-btn" title="Start Processing" data-id="${appointment.id}">
+              <i class="fas fa-play"></i>
+            </button>
+          `;
+        } else if (appointment.queueStatus === 'Processing') {
+          actionButtons = `
+            <button class="action-icon complete-btn" title="Mark Complete" data-id="${appointment.id}">
+              <i class="fas fa-check"></i>
+            </button>
+          `;
+        }
+        
+        row.innerHTML = `
+          <td>${appointment.id}</td>
+          <td>${appointment.clientName}</td>
+          <td>${appointment.phone}</td>
+          <td>${appointment.email || '-'}</td>
+          <td>${appointment.service}</td>
+          <td>${appointment.center}</td>
+          <td>${formattedDate} ${formattedTime}</td>
+          <td>${appointment.queueNumber || '-'}</td>
+          <td>${appointment.queueTime || '-'}</td>
+          <td><span class="status-badge ${statusClass}">${appointment.status}</span></td>
+          <td><span class="status-badge ${queueStatusClass}">${appointment.queueStatus || 'N/A'}</span></td>
+          <td>
+            <button class="action-icon view-btn" title="View Details" data-id="${appointment.id}">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${actionButtons}
+            <button class="action-icon reschedule-btn" title="Reschedule" data-id="${appointment.id}">
+              <i class="fas fa-calendar-alt"></i>
+            </button>
+            ${appointment.status === 'Cancelled' || appointment.status === 'No Show' ? 
+              `<button class="action-icon reopen-btn" title="Reopen" data-id="${appointment.id}">
+                <i class="fas fa-redo"></i>
+              </button>` : 
+              `<button class="action-icon cancel-btn" title="Cancel" data-id="${appointment.id}">
+                <i class="fas fa-times"></i>
+              </button>`}
+          </td>
+        `;
+        
+        appointmentsTableBody.appendChild(row);
+      });
+      
+      // Update pagination info
+      updatePaginationInfo();
+      
+      // Add event listeners to action buttons
+      addActionButtonListeners();
+    }
+
+    // Update pagination information
+    function updatePaginationInfo() {
+      const totalItems = filteredAppointments.length;
+      const startIdx = (currentPage - 1) * itemsPerPage + 1;
+      const endIdx = Math.min(startIdx + itemsPerPage - 1, totalItems);
+      
+      showingFromEl.textContent = startIdx;
+      showingToEl.textContent = endIdx;
+      totalEntriesEl.textContent = totalItems;
+      
+      // Update pagination button states
+      prevPageBtn.disabled = currentPage === 1;
+      nextPageBtn.disabled = endIdx >= totalItems;
+    }
+
+    // Add event listeners to action buttons in table rows
+    function addActionButtonListeners() {
+      document.querySelectorAll('.view-btn').forEach(btn => {
+        btn.addEventListener('click', () => viewAppointment(btn.dataset.id));
+      });
+      
+      document.querySelectorAll('.reschedule-btn').forEach(btn => {
+        btn.addEventListener('click', () => rescheduleAppointment(btn.dataset.id));
+      });
+      
+      document.querySelectorAll('.cancel-btn').forEach(btn => {
+        btn.addEventListener('click', () => cancelAppointment(btn.dataset.id));
+      });
+      
+      document.querySelectorAll('.reopen-btn').forEach(btn => {
+        btn.addEventListener('click', () => reopenAppointment(btn.dataset.id));
+      });
+      
+      // Add queue management buttons
+      document.querySelectorAll('.process-btn').forEach(btn => {
+        btn.addEventListener('click', () => processAppointment(btn.dataset.id));
+      });
+      
+      document.querySelectorAll('.complete-btn').forEach(btn => {
+        btn.addEventListener('click', () => completeAppointment(btn.dataset.id));
+      });
+    }
+
+    // View appointment details with queue info
+    function viewAppointment(appointmentId) {
+      const appointment = appointments.find(app => app.id === appointmentId);
+      if (!appointment) return;
+      
+      const dateTime = new Date(appointment.dateTime);
+      const formattedDate = dateTime.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        weekday: 'long'
+      });
+      const formattedTime = dateTime.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      
+      // Determine status badge class
+      let statusClass = 'waiting';
+      if (appointment.status === 'Confirmed') statusClass = 'in-progress';
+      if (appointment.status === 'Completed') statusClass = 'completed';
+      if (appointment.status === 'Cancelled' || appointment.status === 'No Show') statusClass = 'cancelled';
+      
+      // Queue status
+      let queueStatusClass = 'waiting';
+      if (appointment.queueStatus === 'Processing') queueStatusClass = 'in-progress';
+      if (appointment.queueStatus === 'Completed') queueStatusClass = 'completed';
+      
+      document.getElementById('appointmentDetails').innerHTML = `
+        <div class="form-group">
+          <label>Reference Number</label>
+          <p>${appointment.id}</p>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Client Name</label>
+            <p>${appointment.clientName}</p>
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <p>${appointment.phone}</p>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Email Address</label>
+          <p>${appointment.email || 'Not provided'}</p>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Service</label>
+            <p>${appointment.service}</p>
+          </div>
+          <div class="form-group">
+            <label>Service Center</label>
+            <p>${appointment.center}</p>
+          </div>
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label>Appointment Date</label>
+            <p>${formattedDate}</p>
+          </div>
+          <div class="form-group">
+            <label>Appointment Time</label>
+            <p>${formattedTime}</p>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Appointment Status</label>
+          <p><span class="status-badge ${statusClass}">${appointment.status}</span></p>
+        </div>
+        
+        <div class="form-group">
+          <label>Queue Number</label>
+          <p>${appointment.queueNumber || 'Not assigned'}</p>
+        </div>
+        
+        <div class="form-group">
+          <label>Queue Status</label>
+          <p><span class="status-badge ${queueStatusClass}">${appointment.queueStatus || 'Unknown'}</span></p>
+        </div>
+        
+        ${appointment.notes ? `
+        <div class="form-group">
+          <label>Notes</label>
+          <p>${appointment.notes}</p>
+        </div>
+        ` : ''}
+      `;
+      
+      // Show the modal
+      document.getElementById('viewAppointmentModal').classList.add('show');
+    }
+
+    // Process appointment (start serving in queue)
+    function processAppointment(appointmentId) {
+      const appointment = appointments.find(app => app.id === appointmentId);
+      if (!appointment || !appointment.queueNumber) return;
+      
+      // Update queue status in queue data
+      const queueData = JSON.parse(localStorage.getItem('hudumaQBookings')) || [];
+      const queueIndex = queueData.findIndex(q => q.queueNumber === appointment.queueNumber);
+      
+      if (queueIndex !== -1) {
+        queueData[queueIndex].status = 'Processing';
+        localStorage.setItem('hudumaQBookings', JSON.stringify(queueData));
+        
+        // Update appointment status
+        appointment.status = 'Confirmed';
+        appointment.queueStatus = 'Processing';
+        
+        // Update localStorage
+        const appointmentsData = JSON.parse(localStorage.getItem('hudumaQAppointments')) || [];
+        const appIndex = appointmentsData.findIndex(a => a.id === appointmentId);
+        if (appIndex !== -1) {
+          appointmentsData[appIndex] = appointment;
+          localStorage.setItem('hudumaQAppointments', JSON.stringify(appointmentsData));
+        }
+        
+        // Trigger storage event to update other tabs
+        window.dispatchEvent(new Event('storage'));
+        
+        updateStats();
+        renderTable();
+        updateCharts();
+        alert('Appointment marked as processing in queue');
+      } else {
+        alert('Queue entry not found');
+      }
+    }
+
+    // Complete appointment
+    function completeAppointment(appointmentId) {
+      const appointment = appointments.find(app => app.id === appointmentId);
+      if (!appointment || !appointment.queueNumber) return;
+      
+      // Update queue status in queue data
+      const queueData = JSON.parse(localStorage.getItem('hudumaQBookings')) || [];
+      const queueIndex = queueData.findIndex(q => q.queueNumber === appointment.queueNumber);
+      
+      if (queueIndex !== -1) {
+        queueData[queueIndex].status = 'Completed';
+        localStorage.setItem('hudumaQBookings', JSON.stringify(queueData));
+        
+        // Update appointment status
+        appointment.status = 'Completed';
+        appointment.queueStatus = 'Completed';
+        
+        // Update localStorage
+        const appointmentsData = JSON.parse(localStorage.getItem('hudumaQAppointments')) || [];
+        const appIndex = appointmentsData.findIndex(a => a.id === appointmentId);
+        if (appIndex !== -1) {
+          appointmentsData[appIndex] = appointment;
+          localStorage.setItem('hudumaQAppointments', JSON.stringify(appointmentsData));
+        }
+        
+        // Trigger storage event to update other tabs
+        window.dispatchEvent(new Event('storage'));
+        
+        updateStats();
+        renderTable();
+        updateCharts();
+        alert('Appointment marked as completed');
+      } else {
+        alert('Queue entry not found');
+      }
+    }
+
+    // Reschedule an appointment
+    function rescheduleAppointment(appointmentId) {
+      alert(`Reschedule functionality for appointment ${appointmentId} would go here`);
+    }
+
+    // Cancel an appointment
+    function cancelAppointment(appointmentId) {
+      if (confirm('Are you sure you want to cancel this appointment?')) {
+        const appointment = appointments.find(app => app.id === appointmentId);
+        if (appointment) {
+          appointment.status = 'Cancelled';
+          
+          // Update localStorage
+          const appointmentsData = JSON.parse(localStorage.getItem('hudumaQAppointments')) || [];
+          const appIndex = appointmentsData.findIndex(a => a.id === appointmentId);
+          if (appIndex !== -1) {
+            appointmentsData[appIndex] = appointment;
+            localStorage.setItem('hudumaQAppointments', JSON.stringify(appointmentsData));
+          }
+          
+          // Trigger storage event to update other tabs
+          window.dispatchEvent(new Event('storage'));
+          
+          updateStats();
+          renderTable();
+          updateCharts();
+          alert('Appointment cancelled successfully');
+        }
+      }
+    }
+
+    // Reopen a cancelled appointment
+    function reopenAppointment(appointmentId) {
+      const appointment = appointments.find(app => app.id === appointmentId);
+      if (appointment) {
+        appointment.status = 'Pending';
+        
+        // Update localStorage
+        const appointmentsData = JSON.parse(localStorage.getItem('hudumaQAppointments')) || [];
+        const appIndex = appointmentsData.findIndex(a => a.id === appointmentId);
+        if (appIndex !== -1) {
+          appointmentsData[appIndex] = appointment;
+          localStorage.setItem('hudumaQAppointments', JSON.stringify(appointmentsData));
+        }
+        
+        // Trigger storage event to update other tabs
+        window.dispatchEvent(new Event('storage'));
+        
+        updateStats();
+        renderTable();
+        updateCharts();
+        alert('Appointment reopened successfully');
+      }
+    }
+
+    // Apply filters to the appointments
+    function applyFilters() {
+      const dateFilter = document.getElementById('appointmentDateFilter').value;
+      const serviceFilter = document.getElementById('appointmentServiceFilter').value;
+      const centerFilter = document.getElementById('appointmentCenterFilter').value;
+      const statusFilter = document.getElementById('appointmentStatusFilter').value;
+      
+      filteredAppointments = appointments.filter(appointment => {
+        // Filter by date range if specified
+        if (dateFilter) {
+          const dates = dateFilter.split(' to ');
+          const startDate = new Date(dates[0]);
+          const endDate = dates[1] ? new Date(dates[1]) : new Date(dates[0]);
+          
+          const appointmentDate = new Date(appointment.dateTime.split(' ')[0]);
+          
+          if (appointmentDate < startDate || appointmentDate > endDate) {
+            return false;
+          }
+        }
+        
+        // Filter by service if specified
+        if (serviceFilter && appointment.service !== serviceFilter) {
+          return false;
+        }
+        
+        // Filter by center if specified
+        if (centerFilter && appointment.center !== centerFilter) {
+          return false;
+        }
+        
+        // Filter by status if specified
+        if (statusFilter && appointment.status !== statusFilter) {
+          return false;
+        }
+        
+        return true;
+      });
+      
+      // Reset to first page
+      currentPage = 1;
+      renderTable();
+    }
+
+    // Initialize charts
+    function initializeCharts() {
+      // Status distribution chart
+      const statusCtx = document.getElementById('statusChart').getContext('2d');
+      statusChart = new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+          labels: ['Pending', 'Confirmed', 'Completed', 'Cancelled', 'No Show'],
+          datasets: [{
+            data: [0, 0, 0, 0, 0],
+            backgroundColor: [
+              '#fff3cd',
+              '#cce5ff',
+              '#d4edda',
+              '#f8d7da',
+              '#e2e3e5'
+            ],
+            borderColor: [
+              '#856404',
+              '#004085',
+              '#155724',
+              '#721c24',
+              '#383d41'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+      
+      // Daily trend chart
+      const trendCtx = document.getElementById('trendChart').getContext('2d');
+      trendChart = new Chart(trendCtx, {
+        type: 'line',
+        data: {
+          labels: [],
+          datasets: [{
+            label: 'Appointments',
+            data: [],
+            backgroundColor: 'rgba(67, 97, 238, 0.2)',
+            borderColor: 'rgba(67, 97, 238, 1)',
+            borderWidth: 2,
+            tension: 0.1,
+            fill: true
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    }
+
+    // Update charts with current data
+    function updateCharts() {
+      // Update status distribution chart
+      const statusCounts = {
+        'Pending': 0,
+        'Confirmed': 0,
+        'Completed': 0,
+        'Cancelled': 0,
+        'No Show': 0
+      };
+      
+      appointments.forEach(app => {
+        statusCounts[app.status]++;
+      });
+      
+      statusChart.data.datasets[0].data = [
+        statusCounts['Pending'],
+        statusCounts['Confirmed'],
+        statusCounts['Completed'],
+        statusCounts['Cancelled'],
+        statusCounts['No Show']
+      ];
+      statusChart.update();
+      
+      // Update daily trend chart (last 7 days)
+      const today = new Date();
+      const labels = [];
+      const data = [];
+      
+      for (let i = 6; i >= 0; i--) {
+        const date = new Date();
+        date.setDate(today.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+        labels.push(date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }));
+        
+        const count = appointments.filter(app => 
+          new Date(app.dateTime).toISOString().split('T')[0] === dateStr
+        ).length;
+        data.push(count);
+      }
+      
+      trendChart.data.labels = labels;
+      trendChart.data.datasets[0].data = data;
+      trendChart.update();
+    }
+
+    // Update alerts widget
+    function updateAlerts() {
+      const alertsContainer = document.getElementById('alertsContainer');
+      alertsContainer.innerHTML = '';
+      
+      // Check for high cancellation rate today
+      const today = new Date().toISOString().split('T')[0];
+      const todayApps = appointments.filter(app => {
+        const appDate = new Date(app.dateTime).toISOString().split('T')[0];
+        return appDate === today;
+      });
+      const cancelledToday = todayApps.filter(app => app.status === 'Cancelled').length;
+      const cancellationRate = todayApps.length > 0 ? (cancelledToday / todayApps.length) * 100 : 0;
+      
+      if (cancellationRate > 10) {
+        alertsContainer.appendChild(createAlertItem(
+          'critical',
+          'fas fa-exclamation-triangle',
+          `High cancellation rate today (${cancellationRate.toFixed(1)}%)`,
+          'Just now'
+        ));
+      }
+      
+      // Check for overdue appointments
+      const now = new Date();
+      const overdueApps = appointments.filter(app => {
+        const appTime = new Date(app.dateTime);
+        return app.status === 'Confirmed' && appTime < now;
+      });
+      
+      if (overdueApps.length > 0) {
+        const centersWithOverdue = [...new Set(overdueApps.map(app => app.center))];
+        
+        centersWithOverdue.forEach(center => {
+          const centerOverdue = overdueApps.filter(app => app.center === center).length;
+          alertsContainer.appendChild(createAlertItem(
+            'warning',
+            'fas fa-clock',
+            `${centerOverdue} appointments overdue at ${center}`,
+            '30 minutes ago'
+          ));
+        });
+      }
+      
+      // Check for peak times
+      const hourCounts = {};
+      for (let i = 0; i < 24; i++) {
+        hourCounts[i] = 0;
+      }
+      
+      appointments.forEach(app => {
+        const hour = new Date(app.dateTime).getHours();
+        hourCounts[hour]++;
+      });
+      
+      // Find the hour with most appointments
+      let peakHour = 0;
+      let maxCount = 0;
+      
+      for (const [hour, count] of Object.entries(hourCounts)) {
+        if (count > maxCount) {
+          maxCount = count;
+          peakHour = hour;
+        }
+      }
+      
+      alertsContainer.appendChild(createAlertItem(
+        'info',
+        'fas fa-info-circle',
+        `Peak time detected: ${peakHour}:00 - ${parseInt(peakHour) + 1}:00`,
+        '1 hour ago'
+      ));
+    }
+
+    // Create an alert item
+    function createAlertItem(type, icon, message, time) {
+      const alertItem = document.createElement('div');
+      alertItem.className = 'alert-item';
+      
+      alertItem.innerHTML = `
+        <div class="alert-icon ${type}">
+          <i class="${icon}"></i>
+        </div>
+        <div class="alert-details">
+          <p>${message}</p>
+          <span class="alert-time">${time}</span>
+        </div>
+      `;
+      
+      return alertItem;
+    }
+
+    // Set up event listeners
+    function setupEventListeners() {
+      // Pagination buttons
+      prevPageBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          renderTable();
+        }
+      });
+      
+      nextPageBtn.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredAppointments.length / itemsPerPage);
+        if (currentPage < totalPages) {
+          currentPage++;
+          renderTable();
+        }
+      });
+      
+      // Refresh data button
+      refreshDataBtn.addEventListener('click', () => {
+        fetchAppointments();
+        fetchQueueData();
+      });
+      
+      // Apply filters button
+      applyFiltersBtn.addEventListener('click', applyFilters);
+      
+      // Add appointment button
+      addAppointmentBtn.addEventListener('click', () => {
+        document.getElementById('addAppointmentModal').classList.add('show');
+      });
+      
+      // Close modal buttons
+      document.getElementById('closeModal').addEventListener('click', () => {
+        document.getElementById('addAppointmentModal').classList.remove('show');
+      });
+      
+      document.getElementById('closeViewModal').addEventListener('click', () => {
+        document.getElementById('viewAppointmentModal').classList.remove('show');
+      });
+      
+      document.getElementById('closeDetails').addEventListener('click', () => {
+        document.getElementById('viewAppointmentModal').classList.remove('show');
+      });
+      
+      // Cancel appointment button
+      document.getElementById('cancelAppointment').addEventListener('click', () => {
+        document.getElementById('addAppointmentModal').classList.remove('show');
+      });
+      
+      // Save appointment button
+      saveAppointmentBtn.addEventListener('click', saveAppointment);
+      
+      // Export appointments button
+      exportAppointmentsBtn.addEventListener('click', exportAppointments);
+      
+      // Profile dropdown
+      document.getElementById('profileDropdown').addEventListener('click', (e) => {
+        e.stopPropagation();
+        document.getElementById('dropdownMenu').classList.toggle('show');
+      });
+      
+      // Close dropdown when clicking outside
+      window.addEventListener('click', () => {
+        document.getElementById('dropdownMenu').classList.remove('show');
+      });
+    }
+
+    // Save new appointment
+    function saveAppointment() {
+      const form = document.getElementById('appointmentForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+      
+      // Generate a new appointment ID
+      const today = new Date();
+      const newId = `AP-${today.getFullYear()}-${1000 + appointments.length}`;
+      
+      // Generate a queue number
+      const queueNumber = `HQ-${Math.floor(1000 + Math.random() * 9000)}`;
+      
+      // Create new appointment object
+      const newAppointment = {
+        id: newId,
+        clientName: document.getElementById('clientName').value,
+        phone: document.getElementById('clientPhone').value,
+        email: document.getElementById('clientEmail').value,
+        service: document.getElementById('appointmentService').value,
+        center: document.getElementById('appointmentCenter').value,
+        dateTime: `${document.getElementById('appointmentDate').value} ${document.getElementById('appointmentTime').value}`,
+        status: 'Pending',
+        notes: document.getElementById('appointmentNotes').value,
+        queueNumber: queueNumber
+      };
+      
+      // Create corresponding queue entry
+      const newQueueEntry = {
+        queueNumber: queueNumber,
+        fullName: newAppointment.clientName,
+        service: newAppointment.service,
+        center: newAppointment.center,
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        status: 'Waiting'
+      };
+      
+      // Save to localStorage
+      const appointmentsData = JSON.parse(localStorage.getItem('hudumaQAppointments')) || [];
+      appointmentsData.push(newAppointment);
+      localStorage.setItem('hudumaQAppointments', JSON.stringify(appointmentsData));
+      
+      const existingQueue = JSON.parse(localStorage.getItem('hudumaQBookings')) || [];
+      existingQueue.push(newQueueEntry);
+      localStorage.setItem('hudumaQBookings', JSON.stringify(existingQueue));
+      
+      // Add to current data
+      appointments.unshift({
+        ...newAppointment,
+        queueStatus: 'Waiting',
+        queueTime: newQueueEntry.time
+      });
+      
+      filteredAppointments = [...appointments];
+      
+      // Reset form
+      form.reset();
+      
+      // Close modal
+      document.getElementById('addAppointmentModal').classList.remove('show');
+      
+      // Trigger storage event to update other tabs
+      window.dispatchEvent(new Event('storage'));
+      
+      // Update UI
+      updateStats();
+      renderTable();
+      updateCharts();
+      updateAlerts();
+      
+      alert('Appointment created successfully!');
+    }
+
+    // Export appointments to CSV
+    function exportAppointments() {
+      if (filteredAppointments.length === 0) {
+        alert('No appointments to export');
+        return;
+      }
+      
+      // Create CSV content
+      let csvContent = "Ref No,Client Name,Phone,Email,Service,Center,Date,Time,Status,Queue Number,Queue Status,Queue Time\n";
+      
+      filteredAppointments.forEach(appointment => {
+        const [date, time] = appointment.dateTime.split(' ');
+        csvContent += `"${appointment.id}","${appointment.clientName}","${appointment.phone}","${appointment.email || ''}","${appointment.service}","${appointment.center}","${date}","${time}","${appointment.status}","${appointment.queueNumber || ''}","${appointment.queueStatus || ''}","${appointment.queueTime || ''}"\n`;
+      });
+      
+      // Create download link
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `appointments_${new Date().toISOString().split('T')[0]}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,2203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - HudumaQ</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<style>
+  /* Base Styles & Variables */
+:root {
+  --primary-color: #4361ee;
+  --primary-light: #e6e9ff;
+  --secondary-color: #3f37c9;
+  --success-color: #4cc9f0;
+  --warning-color: #f8961e;
+  --danger-color: #f94144;
+  --light-color: #f8f9fa;
+  --dark-color: #212529;
+  --gray-color: #6c757d;
+  --light-gray: #e9ecef;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f7fb;
+  color: var(--dark-color);
+  line-height: 1.6;
+}
+
+/* Dashboard Layout */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styles */
+.sidebar {
+  width: 250px;
+  background: white;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  transition: var(--transition);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.logo i {
+  margin-right: 10px;
+  font-size: 1.8rem;
+}
+
+.sidebar-nav {
+  flex: 1;
+  padding: 1rem 0;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+}
+
+.sidebar-nav li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1.5rem;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.sidebar-nav li a i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar-nav li a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.sidebar-nav li.active a {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  border-left: 3px solid var(--primary-color);
+}
+
+.sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--light-gray);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  color: var(--gray-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.logout-btn:hover {
+  color: var(--danger-color);
+}
+
+.logout-btn i {
+  margin-right: 10px;
+}
+
+/* Main Content Styles */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 90;
+}
+
+.search-bar {
+  position: relative;
+  width: 300px;
+}
+
+.search-bar i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--gray-color);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.5rem 1rem 0.5rem 2.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.notification-bell {
+  position: relative;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.notification-bell i {
+  font-size: 1.2rem;
+  color: var(--gray-color);
+}
+
+.notification-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background: var(--danger-color);
+  color: white;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-dropdown {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.profile-dropdown img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-dropdown span {
+  margin-right: 8px;
+  font-weight: 500;
+}
+
+/* Dropdown Menu Styles */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  min-width: 200px;
+  z-index: 1000;
+  display: none;
+  margin-top: 10px;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
+
+.dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: var(--dark-color);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+.dropdown-menu a:hover {
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+}
+
+.dropdown-menu a i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--light-gray);
+  margin: 0.5rem 0;
+}
+
+/* Dashboard Content */
+.dashboard-content {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.page-header h1 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.page-header p {
+  color: var(--gray-color);
+}
+
+/* Stats Grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+  display: flex;
+  transition: var(--transition);
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-success {
+  background-color: var(--success-color);
+}
+
+.bg-warning {
+  background-color: var(--warning-color);
+}
+
+.bg-danger {
+  background-color: var(--danger-color);
+}
+
+.stat-info h3 {
+  font-size: 1.8rem;
+  margin-bottom: 0.3rem;
+}
+
+.stat-info p {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.stat-change {
+  font-size: 0.8rem;
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+}
+
+.stat-change i {
+  margin-right: 4px;
+  font-size: 0.7rem;
+}
+
+.positive {
+  color: #2ecc71;
+}
+
+.negative {
+  color: var(--danger-color);
+}
+
+.neutral {
+  color: var(--gray-color);
+}
+
+/* Quick Actions */
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  background: white;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  padding: 0.7rem 1.2rem;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+  font-weight: 500;
+}
+
+.action-btn i {
+  margin-right: 8px;
+}
+
+.action-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Data Card */
+.data-card {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.card-header h2 {
+  display: flex;
+  align-items: center;
+  font-size: 1.3rem;
+}
+
+.card-header h2 i {
+  margin-right: 10px;
+  color: var(--primary-color);
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  margin-bottom: 4px;
+  color: var(--gray-color);
+  display: flex;
+  align-items: center;
+}
+
+.filter-group label i {
+  margin-right: 5px;
+}
+
+.filter-group select,
+.filter-group input {
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  min-width: 150px;
+}
+
+.filter-btn {
+  background: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  align-self: flex-end;
+}
+
+.filter-btn:hover {
+  background: var(--secondary-color);
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+  padding: 0 1.5rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 1rem;
+  font-weight: 600;
+  color: var(--gray-color);
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.data-table th i {
+  margin-left: 5px;
+  color: var(--light-gray);
+  cursor: pointer;
+}
+
+.data-table th.sort-asc i.fa-sort,
+.data-table th.sort-desc i.fa-sort {
+  display: none;
+}
+
+.data-table th.sort-asc i.fa-sort-up {
+  display: inline;
+  color: var(--primary-color);
+}
+
+.data-table th.sort-desc i.fa-sort-down {
+  display: inline;
+  color: var(--primary-color);
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--light-gray);
+  white-space: nowrap;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover {
+  background-color: #f8f9fa;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.waiting {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.in-progress {
+  background-color: #cce5ff;
+  color: #004085;
+}
+
+.completed {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.action-icon {
+  background: none;
+  border: none;
+  color: var(--gray-color);
+  cursor: pointer;
+  margin-right: 10px;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.action-icon:hover {
+  color: var(--primary-color);
+}
+
+/* Card Footer */
+.card-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.table-info {
+  color: var(--gray-color);
+  font-size: 0.9rem;
+}
+
+.table-info span {
+  font-weight: 600;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--light-gray);
+  background: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+}
+
+.pagination-btn:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.pagination-btn.active {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Widgets Grid */
+.widgets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.widget {
+  background: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.widget-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.widget-header h3 {
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+}
+
+.widget-header h3 i {
+  margin-right: 8px;
+  color: var(--primary-color);
+}
+
+.widget-filter {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+  font-size: 0.8rem;
+}
+
+.widget-content {
+  padding: 1.5rem;
+}
+
+.pie-chart-placeholder,
+.line-chart-placeholder {
+  width: 100%;
+  height: 200px;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gray-color);
+  border-radius: var(--border-radius);
+}
+
+.alert-item {
+  display: flex;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--light-gray);
+}
+
+.alert-item:last-child {
+  border-bottom: none;
+}
+
+.alert-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  font-size: 1rem;
+}
+
+.critical {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.alert-details p {
+  font-size: 0.9rem;
+  margin-bottom: 0.2rem;
+}
+
+.alert-time {
+  font-size: 0.8rem;
+  color: var(--gray-color);
+}
+
+/* Dashboard Footer */
+.dashboard-footer {
+  padding: 1rem 1.5rem;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: var(--gray-color);
+}
+
+.footer-links a {
+  margin-left: 1rem;
+  color: var(--gray-color);
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  color: var(--primary-color);
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: var(--box-shadow);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+  font-size: 1.3rem;
+  color: var(--primary-color);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--gray-color);
+}
+
+.modal-body {
+  margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.modal-btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.modal-btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+}
+
+.modal-btn-primary:hover {
+  background-color: var(--secondary-color);
+}
+
+.modal-btn-secondary {
+  background-color: white;
+  color: var(--gray-color);
+  border: 1px solid var(--light-gray);
+}
+
+.modal-btn-secondary:hover {
+  border-color: var(--gray-color);
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--light-gray);
+  border-radius: var(--border-radius);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--primary-light);
+  border-top: 4px solid var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  
+  .sidebar-header .logo span,
+  .sidebar-nav li a span,
+  .logout-btn span {
+    display: none;
+  }
+  
+  .sidebar-nav li a {
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .sidebar-nav li a i {
+    margin-right: 0;
+    font-size: 1.3rem;
+  }
+  
+  .sidebar-footer {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .filter-controls {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .filter-group select,
+  .filter-group input {
+    width: 100%;
+  }
+  
+  .filter-btn {
+    width: 100%;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .card-footer {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination {
+    margin-top: 1rem;
+  }
+  
+  .top-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .search-bar {
+    width: 100%;
+  }
+  
+  .user-profile {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+</style>
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="dashboard-container">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <a href="index.html" class="logo">
+          <i class="fas fa-handshake"></i> HudumaQ
+        </a>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <ul>
+          <li class="active">
+            <a href="admin.html">
+              <i class="fas fa-tachometer-alt"></i>
+              <span>Dashboard</span>
+            </a>
+          </li>
+          <li>
+            <a href="appointments.html">
+              <i class="fas fa-calendar-alt"></i>
+              <span>Appointments</span>
+            </a>
+          </li>
+          <li>
+            <a href="service_centers.html">
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Service Centers</span>
+            </a>
+          </li>
+          <li>
+            <a href="settings.html">
+              <i class="fas fa-cog"></i>
+              <span>Settings</span>
+            </a>
+          </li>
+          <li>
+            <a href="reports.html">
+              <i class="fas fa-chart-line"></i>
+              <span>Reports</span>
+            </a>
+          </li>
+          <li>
+            <a href="users.html">
+              <i class="fas fa-users"></i>
+              <span>Users</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="sidebar-footer">
+        <a href="login.html" class="logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Logout</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navigation -->
+      <header class="top-nav">
+        <div class="search-bar">
+          <i class="fas fa-search"></i>
+          <input type="text" placeholder="Search appointments, users...">
+        </div>
+        
+        <div class="user-profile">
+          <div class="notification-bell">
+            <i class="fas fa-bell"></i>
+            <span class="notification-count">0</span>
+          </div>
+          <div class="profile-dropdown" id="profileDropdown">
+            <img src="https://via.placeholder.com/40" alt="Admin Profile">
+            <span>Admin User</span>
+            <i class="fas fa-chevron-down"></i>
+            
+            <!-- Dropdown Menu -->
+            <div class="dropdown-menu" id="dropdownMenu">
+              <a href="profile.html">
+                <i class="fas fa-user"></i> My Profile
+              </a>
+              <a href="settings.html">
+                 <i class="fas fa-cog"></i>
+                 <span>Settings</span>
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="login.html">
+                <i class="fas fa-sign-out-alt"></i> Logout
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Dashboard Content -->
+      <section class="dashboard-content">
+        <div class="page-header">
+          <h1><i class="fas fa-tachometer-alt"></i> Dashboard Overview</h1>
+          <p>Monitor and manage appointments across all service centers</p>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon bg-primary">
+              <i class="fas fa-users"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="totalAppointments">0</h3>
+              <p>Total Appointments Today</p>
+              <span class="stat-change positive">
+                <i class="fas fa-arrow-up"></i> <span id="appointmentsChange">0%</span> from yesterday
+              </span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-success">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="completedToday">0</h3>
+              <p>Completed Today</p>
+              <span class="stat-change positive">
+                <i class="fas fa-arrow-up"></i> <span id="completedChange">0%</span> from yesterday
+              </span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-warning">
+              <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="avgProcessingTime">0 min</h3>
+              <p>Avg. Processing Time</p>
+              <span class="stat-change negative">
+                <i class="fas fa-arrow-down"></i> <span id="processingChange">0%</span> improvement
+              </span>
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <div class="stat-icon bg-danger">
+              <i class="fas fa-user-clock"></i>
+            </div>
+            <div class="stat-info">
+              <h3 id="waitingCount">0</h3>
+              <p>Currently Waiting</p>
+              <span class="stat-change neutral">
+                <i class="fas fa-equals"></i> <span id="waitingChange">Same</span> as yesterday
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="action-btn" id="addCenterBtn">
+            <i class="fas fa-plus"></i> Add New Center
+          </button>
+          <button class="action-btn" id="importDataBtn">
+            <i class="fas fa-file-import"></i> Import Data
+          </button>
+          <button class="action-btn" id="exportData">
+            <i class="fas fa-file-export"></i> Export Data
+          </button>
+          <button class="action-btn" id="sendNotificationBtn">
+            <i class="fas fa-bullhorn"></i> Send Notification
+          </button>
+        </div>
+
+        <!-- Main Data Card -->
+        <div class="data-card">
+          <div class="card-header">
+            <h2><i class="fas fa-list"></i> Current Queue</h2>
+            
+            <div class="filter-controls">
+              <div class="filter-group">
+                <label for="dateFilter"><i class="fas fa-calendar-day"></i> Date</label>
+                <input type="text" id="dateFilter" class="date-picker" placeholder="Select date">
+              </div>
+              
+              <div class="filter-group">
+                <label for="adminServiceFilter"><i class="fas fa-filter"></i> Service</label>
+                <select id="adminServiceFilter">
+                  <option value="">All Services</option>
+                  <option value="ID Replacement & Applications">ID Replacement & Applications</option>
+                  <option value="Birth & Death Certificates">Birth & Death Certificates</option>
+                  <option value="NHIF Services">NHIF Services</option>
+                  <option value="NSSF Services">NSSF Services</option>
+                  <option value="KRA Services">KRA Services</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="adminCenterFilter"><i class="fas fa-map-marker-alt"></i> Center</label>
+                <select id="adminCenterFilter">
+                  <option value="">All Centers</option>
+                  <option value="Nairobi GPO">Nairobi GPO</option>
+                  <option value="Mombasa">Mombasa</option>
+                  <option value="Kisumu">Kisumu</option>
+                  <option value="Nakuru">Nakuru</option>
+                </select>
+              </div>
+              
+              <div class="filter-group">
+                <label for="statusFilter"><i class="fas fa-info-circle"></i> Status</label>
+                <select id="statusFilter">
+                  <option value="">All Statuses</option>
+                  <option value="Waiting">Waiting</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                </select>
+              </div>
+              
+              <button class="filter-btn" id="applyFilters">
+                <i class="fas fa-filter"></i> Apply Filters
+              </button>
+            </div>
+          </div>
+
+          <div class="table-container">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th data-sort="queue_number">Queue No <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th data-sort="fullname">Full Name <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th data-sort="phone">Phone <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th data-sort="service_type">Service <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th data-sort="location">Center <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th data-sort="appointment_time">Time <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th data-sort="status">Status <i class="fas fa-sort"></i><i class="fas fa-sort-up" style="display:none"></i><i class="fas fa-sort-down" style="display:none"></i></th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminQueueTableBody">
+                <tr>
+                  <td colspan="8" class="text-center py-4">
+                    <div class="loading-spinner">
+                      <div class="spinner"></div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card-footer">
+            <div class="table-info">
+              Showing <span id="showingFrom">0</span>-<span id="showingTo">0</span> of <span id="totalEntries">0</span> entries
+            </div>
+            
+            <div class="pagination">
+              <button class="pagination-btn" id="prevPage" disabled>
+                <i class="fas fa-chevron-left"></i>
+              </button>
+              <button class="pagination-btn active">1</button>
+              <button class="pagination-btn">2</button>
+              <button class="pagination-btn">3</button>
+              <span>...</span>
+              <button class="pagination-btn">5</button>
+              <button class="pagination-btn" id="nextPage">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Dashboard Widgets -->
+        <div class="widgets-grid">
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-pie"></i> Service Distribution</h3>
+              <select class="widget-filter" id="serviceChartFilter">
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+              </select>
+            </div>
+            <div class="widget-content">
+              <div class="pie-chart-placeholder">
+                <canvas id="serviceChart" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-chart-line"></i> Daily Traffic</h3>
+              <select class="widget-filter" id="trafficChartFilter">
+                <option value="7">Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="90">Last 90 Days</option>
+              </select>
+            </div>
+            <div class="widget-content">
+              <div class="line-chart-placeholder">
+                <canvas id="trafficChart" height="200"></canvas>
+              </div>
+            </div>
+          </div>
+          
+          <div class="widget">
+            <div class="widget-header">
+              <h3><i class="fas fa-exclamation-circle"></i> Recent Alerts</h3>
+            </div>
+            <div class="widget-content" id="alertsContainer">
+              <div class="alert-item">
+                <div class="alert-icon critical">
+                  <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="alert-details">
+                  <p>Loading alerts...</p>
+                  <span class="alert-time">Just now</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="dashboard-footer">
+        <p>&copy; 2025 HudumaQ. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Help Center</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Add Center Modal -->
+  <div class="modal" id="addCenterModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-plus"></i> Add New Service Center</h3>
+        <button class="modal-close" id="closeAddCenterModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="addCenterForm">
+          <div class="form-group">
+            <label for="centerName">Center Name</label>
+            <input type="text" id="centerName" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="centerLocation">Location</label>
+            <input type="text" id="centerLocation" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="centerServices">Services Offered</label>
+            <select id="centerServices" class="form-control" multiple required>
+              <option value="ID Replacement & Applications">ID Replacement & Applications</option>
+              <option value="Birth & Death Certificates">Birth & Death Certificates</option>
+              <option value="NHIF Services">NHIF Services</option>
+              <option value="NSSF Services">NSSF Services</option>
+              <option value="KRA Services">KRA Services</option>
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="cancelAddCenter">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="saveCenter">Save Center</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Send Notification Modal -->
+  <div class="modal" id="notificationModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-bullhorn"></i> Send Notification</h3>
+        <button class="modal-close" id="closeNotificationModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="notificationForm">
+          <div class="form-group">
+            <label for="notificationRecipients">Recipients</label>
+            <select id="notificationRecipients" class="form-control" required>
+              <option value="all">All Users</option>
+              <option value="waiting">Users Currently Waiting</option>
+              <option value="center">Specific Center</option>
+              <option value="service">Specific Service</option>
+            </select>
+          </div>
+          <div class="form-group" id="centerSelectGroup" style="display:none">
+            <label for="notificationCenter">Select Center</label>
+            <select id="notificationCenter" class="form-control">
+              <option value="Nairobi GPO">Nairobi GPO</option>
+              <option value="Mombasa">Mombasa</option>
+              <option value="Kisumu">Kisumu</option>
+              <option value="Nakuru">Nakuru</option>
+            </select>
+          </div>
+          <div class="form-group" id="serviceSelectGroup" style="display:none">
+            <label for="notificationService">Select Service</label>
+            <select id="notificationService" class="form-control">
+              <option value="ID Replacement & Applications">ID Replacement & Applications</option>
+              <option value="Birth & Death Certificates">Birth & Death Certificates</option>
+              <option value="NHIF Services">NHIF Services</option>
+              <option value="NSSF Services">NSSF Services</option>
+              <option value="KRA Services">KRA Services</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="notificationMessage">Message</label>
+            <textarea id="notificationMessage" class="form-control" rows="4" required></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="cancelNotification">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="sendNotification">Send Notification</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import Data Modal -->
+  <div class="modal" id="importModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-file-import"></i> Import Data</h3>
+        <button class="modal-close" id="closeImportModal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="importForm">
+          <div class="form-group">
+            <label for="importType">Import Type</label>
+            <select id="importType" class="form-control" required>
+              <option value="appointments">Appointments</option>
+              <option value="centers">Service Centers</option>
+              <option value="users">Users</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="importFile">CSV File</label>
+            <input type="file" id="importFile" class="form-control" accept=".csv" required>
+          </div>
+          <div class="form-group">
+            <label>
+              <input type="checkbox" id="overwriteData"> Overwrite existing data
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="cancelImport">Cancel</button>
+        <button class="modal-btn modal-btn-primary" id="confirmImport">Import Data</button>
+      </div>
+    </div>
+  </div>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script>
+  // Global variables
+  const APPOINTMENTS_KEY = 'hudumaQAppointments';
+  const QUEUE_KEY = 'hudumaQBookings';
+  
+  // DOM Elements
+  const queueTableBody = document.getElementById('adminQueueTableBody');
+  const totalAppointmentsEl = document.getElementById('totalAppointments');
+  const completedTodayEl = document.getElementById('completedToday');
+  const avgProcessingTimeEl = document.getElementById('avgProcessingTime');
+  const waitingCountEl = document.getElementById('waitingCount');
+  const appointmentsChangeEl = document.getElementById('appointmentsChange');
+  const completedChangeEl = document.getElementById('completedChange');
+  const processingChangeEl = document.getElementById('processingChange');
+  const waitingChangeEl = document.getElementById('waitingChange');
+  const alertsContainer = document.getElementById('alertsContainer');
+  const showingFromEl = document.getElementById('showingFrom');
+  const showingToEl = document.getElementById('showingTo');
+  const totalEntriesEl = document.getElementById('totalEntries');
+  const notificationCountEl = document.querySelector('.notification-count');
+
+  // Initialize sample data if none exists
+  function initializeSampleData() {
+    if (!localStorage.getItem(APPOINTMENTS_KEY)) {
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate() + 1);
+      
+      const sampleAppointments = [
+        {
+          queueNumber: "Q001",
+          clientName: "John Doe",
+          phone: "0712345678",
+          service: "ID Replacement & Applications",
+          center: "Nairobi GPO",
+          dateTime: today.toISOString(),
+          status: "Waiting"
+        },
+        {
+          queueNumber: "Q002",
+          clientName: "Jane Smith",
+          phone: "0723456789",
+          service: "NHIF Services",
+          center: "Mombasa",
+          dateTime: today.toISOString(),
+          status: "In Progress"
+        },
+        {
+          queueNumber: "Q003",
+          clientName: "Robert Johnson",
+          phone: "0734567890",
+          service: "KRA Services",
+          center: "Kisumu",
+          dateTime: today.toISOString(),
+          status: "Completed"
+        },
+        {
+          queueNumber: "Q004",
+          clientName: "Mary Williams",
+          phone: "0745678901",
+          service: "Birth & Death Certificates",
+          center: "Nakuru",
+          dateTime: today.toISOString(),
+          status: "Waiting"
+        },
+        {
+          queueNumber: "Q005",
+          clientName: "David Brown",
+          phone: "0756789012",
+          service: "NSSF Services",
+          center: "Nairobi GPO",
+          dateTime: tomorrow.toISOString(),
+          status: "Waiting"
+        }
+      ];
+      localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(sampleAppointments));
+    }
+
+    if (!localStorage.getItem(QUEUE_KEY)) {
+      const sampleQueue = [
+        {
+          queueNumber: "Q001",
+          status: "Waiting"
+        },
+        {
+          queueNumber: "Q002",
+          status: "In Progress"
+        },
+        {
+          queueNumber: "Q003",
+          status: "Completed"
+        },
+        {
+          queueNumber: "Q004",
+          status: "Waiting"
+        },
+        {
+          queueNumber: "Q005",
+          status: "Waiting"
+        }
+      ];
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(sampleQueue));
+    }
+  }
+
+  // Function to fetch and transform data
+  function getAppointmentsData() {
+    const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) || [];
+    const queueData = JSON.parse(localStorage.getItem(QUEUE_KEY)) || [];
+    
+    // Transform the data to match table expectations
+    return appointments.map(app => {
+      const queueEntry = queueData.find(q => q.queueNumber === app.queueNumber);
+      return {
+        queue_number: app.queueNumber,
+        fullname: app.clientName,
+        phone: app.phone,
+        service_type: app.service,
+        location: app.center,
+        appointment_time: app.dateTime,
+        status: queueEntry ? queueEntry.status : app.status || 'Unknown'
+      };
+    });
+  }
+
+  // Initialize the dashboard when page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeSampleData();
+    
+    // Initialize date picker with today's date
+    flatpickr("#dateFilter", {
+      dateFormat: "Y-m-d",
+      defaultDate: "today",
+      onChange: function(selectedDates, dateStr, instance) {
+        loadDashboardData();
+      }
+    });
+    
+    // Set up chart canvas elements
+    const pieChartPlaceholder = document.querySelector('.pie-chart-placeholder');
+    const lineChartPlaceholder = document.querySelector('.line-chart-placeholder');
+    
+    pieChartPlaceholder.innerHTML = '<canvas id="serviceChart" height="200"></canvas>';
+    lineChartPlaceholder.innerHTML = '<canvas id="trafficChart" height="200"></canvas>';
+    
+    // Load initial data
+    loadDashboardData();
+  });
+
+  // Function to load all dashboard data
+  function loadDashboardData() {
+    // Show loading spinner
+    queueTableBody.innerHTML = `
+      <tr>
+        <td colspan="8" class="text-center py-4">
+          <div class="loading-spinner">
+            <div class="spinner"></div>
+          </div>
+        </td>
+      </tr>
+    `;
+
+    try {
+      // Get filter values
+      const dateFilter = document.getElementById('dateFilter').value;
+      const serviceFilter = document.getElementById('adminServiceFilter').value;
+      const centerFilter = document.getElementById('adminCenterFilter').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+
+      // Get all appointments
+      let appointments = getAppointmentsData();
+
+      // Apply filters
+      if (dateFilter) {
+        const filterDate = new Date(dateFilter).toISOString().split('T')[0];
+        appointments = appointments.filter(app => 
+          new Date(app.appointment_time).toISOString().split('T')[0] === filterDate
+        );
+      }
+      
+      if (serviceFilter) {
+        appointments = appointments.filter(app => app.service_type === serviceFilter);
+      }
+      
+      if (centerFilter) {
+        appointments = appointments.filter(app => app.location === centerFilter);
+      }
+      
+      if (statusFilter) {
+        appointments = appointments.filter(app => app.status === statusFilter);
+      }
+
+      // Update the table with filtered data
+      updateQueueTable(appointments);
+
+      // Update stats
+      updateStats({
+        totalAppointments: appointments.length,
+        completedToday: appointments.filter(a => a.status === 'Completed').length,
+        avgProcessingTime: 15,
+        waitingCount: appointments.filter(a => a.status === 'Waiting').length,
+        appointmentsChange: '10%',
+        completedChange: '5%',
+        processingChange: '2%',
+        waitingChange: 'Same'
+      });
+
+      // Update alerts
+      updateAlerts([
+        {
+          type: 'info',
+          message: 'System operating normally',
+          time: 'Just now'
+        }
+      ]);
+
+      // Update notification count
+      notificationCountEl.textContent = '1';
+
+      // Update charts
+      updateCharts(appointments);
+
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      queueTableBody.innerHTML = `
+        <tr>
+          <td colspan="8" class="text-center py-4">
+            Error loading data. Please try again.
+          </td>
+        </tr>
+      `;
+    }
+  }
+
+  // Function to update the queue table
+  function updateQueueTable(appointments) {
+    if (!appointments || appointments.length === 0) {
+      queueTableBody.innerHTML = `
+        <tr>
+          <td colspan="8" class="text-center py-4">
+            No appointments found matching your criteria
+          </td>
+        </tr>
+      `;
+      showingFromEl.textContent = '0';
+      showingToEl.textContent = '0';
+      totalEntriesEl.textContent = '0';
+      return;
+    }
+
+    let tableHTML = '';
+    
+    appointments.forEach(app => {
+      let statusClass = '';
+      if (app.status === 'Waiting') statusClass = 'waiting';
+      if (app.status === 'In Progress') statusClass = 'in-progress';
+      if (app.status === 'Completed') statusClass = 'completed';
+      
+      const appTime = new Date(app.appointment_time);
+      const timeString = appTime.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      
+      tableHTML += `
+        <tr>
+          <td>${app.queue_number}</td>
+          <td>${app.fullname}</td>
+          <td>${app.phone}</td>
+          <td>${app.service_type}</td>
+          <td>${app.location}</td>
+          <td>${timeString}</td>
+          <td><span class="status-badge ${statusClass}">${app.status}</span></td>
+          <td>
+            <button class="action-icon view-btn" title="View Details" data-id="${app.queue_number}">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button class="action-icon process-btn" title="Process" data-id="${app.queue_number}" ${app.status !== 'Waiting' ? 'style="display:none"' : ''}>
+              <i class="fas fa-play"></i>
+            </button>
+            <button class="action-icon complete-btn" title="Complete" data-id="${app.queue_number}" ${app.status !== 'In Progress' ? 'style="display:none"' : ''}>
+              <i class="fas fa-check"></i>
+            </button>
+            <button class="action-icon cancel-btn" title="Cancel" data-id="${app.queue_number}" style="color: var(--danger-color);">
+              <i class="fas fa-times"></i>
+            </button>
+          </td>
+        </tr>
+      `;
+    });
+    
+    queueTableBody.innerHTML = tableHTML;
+    
+    // Add event listeners to action buttons
+    addQueueActionListeners();
+    
+    // Update pagination info
+    showingFromEl.textContent = '1';
+    showingToEl.textContent = appointments.length;
+    totalEntriesEl.textContent = appointments.length;
+  }
+
+  // Add event listeners to queue action buttons
+  function addQueueActionListeners() {
+    document.querySelectorAll('.view-btn').forEach(btn => {
+      btn.addEventListener('click', () => viewQueueItem(btn.dataset.id));
+    });
+    
+    document.querySelectorAll('.process-btn').forEach(btn => {
+      btn.addEventListener('click', () => processQueueItem(btn.dataset.id));
+    });
+    
+    document.querySelectorAll('.complete-btn').forEach(btn => {
+      btn.addEventListener('click', () => completeQueueItem(btn.dataset.id));
+    });
+    
+    document.querySelectorAll('.cancel-btn').forEach(btn => {
+      btn.addEventListener('click', () => cancelQueueItem(btn.dataset.id));
+    });
+  }
+
+  // View queue item details
+  function viewQueueItem(queueNumber) {
+    const queueData = JSON.parse(localStorage.getItem(QUEUE_KEY)) || [];
+    const queueItem = queueData.find(q => q.queueNumber === queueNumber);
+    
+    if (!queueItem) return;
+    
+    const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) || [];
+    const appointment = appointments.find(a => a.queueNumber === queueNumber);
+    
+    alert(`Viewing details for queue item ${queueNumber}\n\n` +
+      `Name: ${appointment.clientName}\n` +
+      `Service: ${appointment.service}\n` +
+      `Center: ${appointment.center}\n` +
+      `Status: ${queueItem.status}\n` +
+      `Appointment Time: ${new Date(appointment.dateTime).toLocaleString()}`);
+  }
+
+  // Process queue item
+  function processQueueItem(queueNumber) {
+    const queueData = JSON.parse(localStorage.getItem(QUEUE_KEY)) || [];
+    const queueIndex = queueData.findIndex(q => q.queueNumber === queueNumber);
+    
+    if (queueIndex !== -1) {
+      queueData[queueIndex].status = 'In Progress';
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(queueData));
+      
+      // Update corresponding appointment status
+      const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) || [];
+      const appointmentIndex = appointments.findIndex(a => a.queueNumber === queueNumber);
+      
+      if (appointmentIndex !== -1) {
+        appointments[appointmentIndex].status = 'In Progress';
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
+      }
+      
+      // Reload data
+      loadDashboardData();
+      alert('Queue item marked as in progress');
+    }
+  }
+
+  // Complete queue item
+  function completeQueueItem(queueNumber) {
+    const queueData = JSON.parse(localStorage.getItem(QUEUE_KEY)) || [];
+    const queueIndex = queueData.findIndex(q => q.queueNumber === queueNumber);
+    
+    if (queueIndex !== -1) {
+      queueData[queueIndex].status = 'Completed';
+      localStorage.setItem(QUEUE_KEY, JSON.stringify(queueData));
+      
+      // Update corresponding appointment status
+      const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) || [];
+      const appointmentIndex = appointments.findIndex(a => a.queueNumber === queueNumber);
+      
+      if (appointmentIndex !== -1) {
+        appointments[appointmentIndex].status = 'Completed';
+        localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
+      }
+      
+      // Reload data
+      loadDashboardData();
+      alert('Queue item marked as completed');
+    }
+  }
+
+  // Cancel queue item
+  function cancelQueueItem(queueNumber) {
+    if (confirm('Are you sure you want to cancel this queue item?')) {
+      const queueData = JSON.parse(localStorage.getItem(QUEUE_KEY)) || [];
+      const queueIndex = queueData.findIndex(q => q.queueNumber === queueNumber);
+      
+      if (queueIndex !== -1) {
+        queueData[queueIndex].status = 'Cancelled';
+        localStorage.setItem(QUEUE_KEY, JSON.stringify(queueData));
+        
+        // Update corresponding appointment status
+        const appointments = JSON.parse(localStorage.getItem(APPOINTMENTS_KEY)) || [];
+        const appointmentIndex = appointments.findIndex(a => a.queueNumber === queueNumber);
+        
+        if (appointmentIndex !== -1) {
+          appointments[appointmentIndex].status = 'Cancelled';
+          localStorage.setItem(APPOINTMENTS_KEY, JSON.stringify(appointments));
+        }
+        
+        // Reload data
+        loadDashboardData();
+        alert('Queue item cancelled successfully');
+      }
+    }
+  }
+
+  // Function to update stats cards
+  function updateStats(stats) {
+    totalAppointmentsEl.textContent = stats.totalAppointments || 0;
+    completedTodayEl.textContent = stats.completedToday || 0;
+    avgProcessingTimeEl.textContent = `${stats.avgProcessingTime || 0} min`;
+    waitingCountEl.textContent = stats.waitingCount || 0;
+    appointmentsChangeEl.textContent = stats.appointmentsChange || '0%';
+    completedChangeEl.textContent = stats.completedChange || '0%';
+    processingChangeEl.textContent = stats.processingChange || '0%';
+    waitingChangeEl.textContent = stats.waitingChange || 'Same';
+  }
+
+  // Function to update alerts
+  function updateAlerts(alerts) {
+    if (!alerts || alerts.length === 0) {
+      alertsContainer.innerHTML = `
+        <div class="alert-item">
+          <div class="alert-icon info">
+            <i class="fas fa-info-circle"></i>
+          </div>
+          <div class="alert-details">
+            <p>No recent alerts</p>
+            <span class="alert-time">Just now</span>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    let alertsHTML = '';
+    
+    alerts.forEach(alert => {
+      let iconClass = '';
+      let alertIcon = '';
+      
+      if (alert.type === 'critical') {
+        iconClass = 'critical';
+        alertIcon = 'fa-exclamation-triangle';
+      } else if (alert.type === 'warning') {
+        iconClass = 'warning';
+        alertIcon = 'fa-exclamation-circle';
+      } else {
+        iconClass = 'info';
+        alertIcon = 'fa-info-circle';
+      }
+      
+      alertsHTML += `
+        <div class="alert-item">
+          <div class="alert-icon ${iconClass}">
+            <i class="fas ${alertIcon}"></i>
+          </div>
+          <div class="alert-details">
+            <p>${alert.message}</p>
+            <span class="alert-time">${alert.time}</span>
+          </div>
+        </div>
+      `;
+    });
+    
+    alertsContainer.innerHTML = alertsHTML;
+  }
+
+  // Function to update charts
+  function updateCharts(appointments) {
+    if (!appointments || appointments.length === 0) {
+      // Handle empty data case
+      document.getElementById('serviceChart').parentElement.innerHTML = '<p>No data available for chart</p>';
+      document.getElementById('trafficChart').parentElement.innerHTML = '<p>No data available for chart</p>';
+      return;
+    }
+
+    // Service distribution chart
+    const serviceCtx = document.getElementById('serviceChart').getContext('2d');
+    
+    // Group by service type
+    const serviceCounts = {};
+    appointments.forEach(app => {
+      serviceCounts[app.service_type] = (serviceCounts[app.service_type] || 0) + 1;
+    });
+    
+    const serviceLabels = Object.keys(serviceCounts);
+    const serviceData = Object.values(serviceCounts);
+    
+    // Colors for the chart
+    const backgroundColors = [
+      'rgba(67, 97, 238, 0.7)',
+      'rgba(76, 201, 240, 0.7)',
+      'rgba(248, 150, 30, 0.7)',
+      'rgba(249, 65, 68, 0.7)',
+      'rgba(108, 117, 125, 0.7)'
+    ];
+    
+    // Destroy previous chart if it exists
+    if (window.serviceChart) {
+      window.serviceChart.destroy();
+    }
+    
+    window.serviceChart = new Chart(serviceCtx, {
+      type: 'pie',
+      data: {
+        labels: serviceLabels,
+        datasets: [{
+          data: serviceData,
+          backgroundColor: backgroundColors,
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+    
+    // Daily traffic chart
+    const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+    
+    // Group appointments by day
+    const dailyCounts = {};
+    appointments.forEach(app => {
+      const date = new Date(app.appointment_time).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+      dailyCounts[date] = (dailyCounts[date] || 0) + 1;
+    });
+    
+    const trafficLabels = Object.keys(dailyCounts).sort((a, b) => {
+      return new Date(a) - new Date(b);
+    });
+    
+    const trafficData = trafficLabels.map(label => dailyCounts[label]);
+    
+    // Destroy previous chart if it exists
+    if (window.trafficChart) {
+      window.trafficChart.destroy();
+    }
+    
+    window.trafficChart = new Chart(trafficCtx, {
+      type: 'line',
+      data: {
+        labels: trafficLabels,
+        datasets: [{
+          label: 'Appointments',
+          data: trafficData,
+          backgroundColor: 'rgba(67, 97, 238, 0.1)',
+          borderColor: 'rgba(67, 97, 238, 1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: true
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        },
+        plugins: {
+          legend: {
+            display: false
+          }
+        }
+      }
+    });
+  }
+
+  // Modal and button event listeners
+  document.getElementById('addCenterBtn').addEventListener('click', () => {
+    document.getElementById('addCenterModal').style.display = 'flex';
+  });
+
+  document.getElementById('closeAddCenterModal').addEventListener('click', () => {
+    document.getElementById('addCenterModal').style.display = 'none';
+  });
+
+  document.getElementById('cancelAddCenter').addEventListener('click', () => {
+    document.getElementById('addCenterModal').style.display = 'none';
+  });
+
+  document.getElementById('sendNotificationBtn').addEventListener('click', () => {
+    document.getElementById('notificationModal').style.display = 'flex';
+  });
+
+  document.getElementById('closeNotificationModal').addEventListener('click', () => {
+    document.getElementById('notificationModal').style.display = 'none';
+  });
+
+  document.getElementById('cancelNotification').addEventListener('click', () => {
+    document.getElementById('notificationModal').style.display = 'none';
+  });
+
+  document.getElementById('importDataBtn').addEventListener('click', () => {
+    document.getElementById('importModal').style.display = 'flex';
+  });
+
+  document.getElementById('closeImportModal').addEventListener('click', () => {
+    document.getElementById('importModal').style.display = 'none';
+  });
+
+  document.getElementById('cancelImport').addEventListener('click', () => {
+    document.getElementById('importModal').style.display = 'none';
+  });
+
+  // Recipient type change handler
+  document.getElementById('notificationRecipients').addEventListener('change', function() {
+    const centerGroup = document.getElementById('centerSelectGroup');
+    const serviceGroup = document.getElementById('serviceSelectGroup');
+    
+    centerGroup.style.display = this.value === 'center' ? 'block' : 'none';
+    serviceGroup.style.display = this.value === 'service' ? 'block' : 'none';
+  });
+
+  // Profile dropdown toggle
+  document.getElementById('profileDropdown').addEventListener('click', function() {
+    document.getElementById('dropdownMenu').classList.toggle('show');
+  });
+
+  // Close dropdown when clicking outside
+  window.addEventListener('click', function(e) {
+    if (!e.target.matches('.profile-dropdown, .profile-dropdown *')) {
+      const dropdown = document.getElementById('dropdownMenu');
+      if (dropdown.classList.contains('show')) {
+        dropdown.classList.remove('show');
+      }
+    }
+  });
+
+  // Apply filters button
+  document.getElementById('applyFilters').addEventListener('click', loadDashboardData);
+
+  // Table sorting functionality
+  document.querySelectorAll('.data-table th[data-sort]').forEach(header => {
+    header.addEventListener('click', function() {
+      const sortField = this.getAttribute('data-sort');
+      const isAsc = this.classList.contains('sort-asc');
+      
+      // Reset all sort indicators
+      document.querySelectorAll('.data-table th').forEach(th => {
+        th.classList.remove('sort-asc', 'sort-desc');
+        th.querySelector('.fa-sort-up').style.display = 'none';
+        th.querySelector('.fa-sort-down').style.display = 'none';
+        th.querySelector('.fa-sort').style.display = 'inline';
+      });
+      
+      // Set new sort indicator
+      if (isAsc) {
+        this.classList.add('sort-desc');
+        this.querySelector('.fa-sort-down').style.display = 'inline';
+        this.querySelector('.fa-sort').style.display = 'none';
+      } else {
+        this.classList.add('sort-asc');
+        this.querySelector('.fa-sort-up').style.display = 'inline';
+        this.querySelector('.fa-sort').style.display = 'none';
+      }
+      
+      // Sort the table data
+      const tableBody = document.querySelector('#adminQueueTableBody');
+      const rows = Array.from(tableBody.querySelectorAll('tr'));
+      
+      rows.sort((a, b) => {
+        const aValue = a.querySelector(`td:nth-child(${header.cellIndex + 1})`).textContent;
+        const bValue = b.querySelector(`td:nth-child(${header.cellIndex + 1})`).textContent;
+        
+        if (isAsc) {
+          return bValue.localeCompare(aValue);
+        } else {
+          return aValue.localeCompare(bValue);
+        }
+      });
+      
+      // Rebuild the table
+      tableBody.innerHTML = '';
+      rows.forEach(row => tableBody.appendChild(row));
+    });
+  });
+
+  // Save center functionality
+  document.getElementById('saveCenter').addEventListener('click', async function() {
+    const centerName = document.getElementById('centerName').value;
+    const centerLocation = document.getElementById('centerLocation').value;
+    const centerServices = Array.from(document.getElementById('centerServices').selectedOptions)
+      .map(option => option.value);
+    
+    if (!centerName || !centerLocation || centerServices.length === 0) {
+      alert('Please fill all fields');
+      return;
+    }
+    
+    try {
+      // In this implementation, we're just showing an alert
+      alert(`Service center "${centerName}" at ${centerLocation} with services: ${centerServices.join(', ')} would be saved`);
+      
+      document.getElementById('addCenterModal').style.display = 'none';
+      document.getElementById('addCenterForm').reset();
+    } catch (error) {
+      console.error('Error adding service center:', error);
+      alert('Error adding service center. Please try again.');
+    }
+  });
+
+  // Send notification functionality
+  document.getElementById('sendNotification').addEventListener('click', async function() {
+    const recipients = document.getElementById('notificationRecipients').value;
+    const message = document.getElementById('notificationMessage').value;
+    
+    if (!message) {
+      alert('Please enter a message');
+      return;
+    }
+    
+    let target = '';
+    if (recipients === 'center') {
+      target = document.getElementById('notificationCenter').value;
+    } else if (recipients === 'service') {
+      target = document.getElementById('notificationService').value;
+    }
+    
+    try {
+      // In this implementation, we're just showing an alert
+      alert(`Notification sent to ${recipients}${target ? ` (${target})` : ''} with message: ${message}`);
+      
+      document.getElementById('notificationModal').style.display = 'none';
+      document.getElementById('notificationForm').reset();
+    } catch (error) {
+      console.error('Error sending notification:', error);
+      alert('Error sending notification. Please try again.');
+    }
+  });
+
+  // Import data functionality
+  document.getElementById('confirmImport').addEventListener('click', async function() {
+    const importType = document.getElementById('importType').value;
+    const fileInput = document.getElementById('importFile');
+    const overwrite = document.getElementById('overwriteData').checked;
+    
+    if (!fileInput.files || fileInput.files.length === 0) {
+      alert('Please select a file to import');
+      return;
+    }
+    
+    try {
+      // In this implementation, we're just showing an alert
+      alert(`Importing ${importType} data from file ${fileInput.files[0].name}, overwrite: ${overwrite}`);
+      
+      document.getElementById('importModal').style.display = 'none';
+      document.getElementById('importForm').reset();
+      
+      // Refresh data
+      loadDashboardData();
+    } catch (error) {
+      console.error('Error importing data:', error);
+      alert('Error importing data. Please try again.');
+    }
+  });
+</script>
+</body>
+</html>
