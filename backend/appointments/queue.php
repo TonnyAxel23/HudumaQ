@@ -45,4 +45,5 @@ try {
 } catch (PDOException $e) {
     sendResponse(false, 'Database error: ' . $e->getMessage());
 }
+
 ?>
